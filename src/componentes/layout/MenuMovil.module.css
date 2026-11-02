@@ -107,3 +107,8 @@
   text-transform: uppercase;
   color: var(--color-texto-suave);
 }
+
+/* El selector ES | EN no se estira a todo el ancho del panel */
+.selectorIdioma {
+  align-self: flex-start;
+}

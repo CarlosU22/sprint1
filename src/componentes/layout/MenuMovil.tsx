@@ -8,6 +8,7 @@ import { BotonEnlace } from "@/componentes/ui/Boton";
 import { useIdioma } from "@/contexto/ProveedorIdioma";
 import { ENLACES_PRINCIPALES, RUTAS } from "@/lib/navegacion";
 import { BuscadorEncabezado } from "./BuscadorEncabezado";
+import { CambioIdioma } from "./CambioIdioma";
 import { Logo } from "./Logo";
 import { OpcionesAccesibilidad } from "./OpcionesAccesibilidad";
 import estilos from "./MenuMovil.module.css";
@@ -110,6 +111,13 @@ export function MenuMovil() {
               {t("menuMovil.botones.crearCuenta")}
             </BotonEnlace>
           </div>
+
+          <section className={estilos.seccion} aria-labelledby="menu-movil-idioma">
+            <h2 id="menu-movil-idioma" className={estilos.tituloSeccion}>
+              {t("menuMovil.secciones.idioma")}
+            </h2>
+            <CambioIdioma className={estilos.selectorIdioma} />
+          </section>
 
           <section className={estilos.seccion} aria-labelledby="menu-movil-accesibilidad">
             <h2 id="menu-movil-accesibilidad" className={estilos.tituloSeccion}>
