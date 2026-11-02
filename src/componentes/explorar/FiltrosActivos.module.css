@@ -1,0 +1,27 @@
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espacio-2);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-1);
+  height: var(--alto-control-sm);
+  padding-inline: var(--espacio-3) var(--espacio-2);
+  border-radius: var(--radio-redondo);
+  background: var(--color-etiqueta);
+  font-size: var(--texto-sm);
+  font-weight: var(--peso-medio);
+  transition: background-color var(--transicion);
+}
+
+.chip:hover {
+  background: var(--color-borde);
+}
+
+.chip svg {
+  width: var(--tamano-icono-sm);
+  height: var(--tamano-icono-sm);
+}

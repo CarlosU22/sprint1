@@ -1,0 +1,132 @@
+.vista {
+  padding-top: var(--espacio-6);
+}
+
+.migas {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-1);
+  font-size: var(--texto-xs);
+  color: var(--color-texto-suave);
+}
+
+.migas li {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-1);
+}
+
+.migas a:hover {
+  text-decoration: underline;
+}
+
+.migas svg {
+  width: var(--tamano-icono-sm);
+  height: var(--tamano-icono-sm);
+}
+
+.migas [aria-current="page"] {
+  font-weight: var(--peso-medio);
+  color: var(--color-texto);
+}
+
+.encabezado {
+  padding-block: var(--espacio-2) var(--espacio-6);
+}
+
+.titulo {
+  font-size: var(--texto-2xl);
+  font-weight: var(--peso-medio);
+}
+
+.resultados {
+  font-size: var(--texto-sm);
+  color: var(--color-texto-suave);
+}
+
+/* Filtros a la izquierda (ancho fijo) y resultados a la derecha */
+.columnas {
+  display: grid;
+  grid-template-columns: var(--ancho-filtros) minmax(0, 1fr);
+  align-items: start;
+  gap: var(--espacio-6);
+}
+
+.lateral {
+  position: sticky;
+  top: calc(var(--alto-encabezado) + var(--espacio-4));
+  padding: var(--espacio-4);
+  border: var(--grosor-borde) solid var(--color-borde);
+  border-radius: var(--radio-lg);
+  background: var(--color-superficie);
+}
+
+.barra {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espacio-3);
+  margin-bottom: var(--espacio-4);
+}
+
+/* "Ordenar:" y la lista van en la misma línea, pegados a la derecha */
+.orden {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--espacio-2);
+  margin-left: auto;
+}
+
+.orden label {
+  font-weight: var(--peso-normal);
+  color: var(--color-texto-suave);
+  white-space: nowrap;
+}
+
+.orden select {
+  width: auto;
+  height: var(--alto-control-sm);
+}
+
+.grilla {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--espacio-4);
+}
+
+.grilla > li {
+  display: flex;
+}
+
+.grilla > li > * {
+  flex: 1;
+}
+
+/* Mientras llegan los nuevos resultados, los actuales se ven atenuados */
+.cargando {
+  opacity: 0.5;
+  transition: opacity var(--transicion);
+}
+
+@media (max-width: 1100px) {
+  .grilla {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* En móvil la barra lateral se esconde: los filtros van en PanelFiltrosMovil */
+@media (max-width: 860px) {
+  .columnas {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .lateral {
+    display: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .grilla {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
