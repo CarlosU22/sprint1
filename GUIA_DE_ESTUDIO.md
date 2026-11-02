@@ -512,3 +512,76 @@ son fáciles de entender y de probar.
   Están Hoy, Este fin de semana y Este mes.
 - **Título "Explorar eventos":** `paginas.explorar` no tiene título propio en la API; se usa
   `footer.columnas.explora.enlaces.explorar`, que tiene exactamente ese texto en ambos idiomas.
+
+---
+
+### US-TAQ-S1-05 · Cambiar el idioma entre español e inglés
+
+**Rama:** `feat/us-taq-s1-05-idioma`
+
+#### a) Qué pasa cuando se pulsa "EN"
+
+```
+1. Clic en EN                       SelectorIdioma (ui) → CambioIdioma (layout)
+2. cambiarIdioma("en")              contexto/ProveedorIdioma.tsx
+3. GET /textos?idioma=en            ¡desde el NAVEGADOR! (la API permite CORS)
+4. setTextos(textosEn)              el estado del contexto cambia…
+5. …todos los componentes que usan useIdioma() se vuelven a pintar en inglés
+6. useEffect → document.documentElement.lang = "en"     (<html lang>)
+7. ¿La persona aceptó las cookies?
+      sí → cookie idioma=en  +  router.refresh()  (para que el <title> también cambie)
+      no → no se guarda nada
+8. Un <p aria-live> invisible anuncia "Language changed to English."
+```
+
+No se recarga la página: solo cambian los textos. Por eso, en la historia 02, todo lo que
+muestra texto se hizo como componente de cliente que lee `useIdioma()`.
+
+#### b) ¿Y al volver a entrar al sitio?
+
+En `src/lib/textosServidor.ts`, `obtenerIdiomaActual()` lee la cookie `idioma` **en el
+servidor** con `cookies()` de `next/headers` (en Next.js 16 es asíncrona: `await cookies()`).
+
+- Si existe → el layout pide los textos en ese idioma y pone `<html lang="en">` desde el
+  primer HTML (sin "parpadeo" en español).
+- Si no existe → español.
+
+La cookie solo existe si la persona aceptó las cookies (historia 06). Si las rechazó, el idioma
+elegido dura mientras navega por el sitio (el estado vive en el layout, que no se desmonta al
+cambiar de página), pero al recargar vuelve a español.
+
+#### c) Archivos
+
+| Archivo                                   | Qué hace                                                                                                                                                        |
+| ----------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `src/contexto/ProveedorIdioma.tsx`        | Ahora tiene estado (`useState`) para `idioma` y `textos`, y la función `cambiarIdioma`. Guarda en un `useRef` los textos ya pedidos para no pedirlos dos veces. |
+| `src/lib/cookies.ts`                      | `leerCookie`, `escribirCookie`, `borrarCookie` y `aceptoCookies()` usando `document.cookie`. Nombres de las cookies en constantes.                              |
+| `src/lib/textosServidor.ts`               | Lee la cookie `idioma` en el servidor.                                                                                                                          |
+| `src/componentes/layout/CambioIdioma.tsx` | Conecta el `SelectorIdioma` (solo visual, historia 01) con el contexto. Está en el encabezado y en el menú móvil (sección "Idioma").                            |
+
+#### d) Conceptos
+
+- **`useState` vs. `useRef`**: los dos guardan valores entre renders, pero cambiar un
+  `useState` vuelve a pintar el componente y cambiar un `useRef` no. Los textos visibles van en
+  `useState`; el "caché" de textos ya pedidos va en `useRef`.
+- **`useEffect`**: sirve para sincronizar React con algo de afuera; aquí, el atributo `lang`
+  de `<html>`, que React no controla directamente.
+- **`router.refresh()`**: le pide al servidor que vuelva a ejecutar los componentes de
+  servidor de la página actual (el layout lee la cookie nueva y `generateMetadata` pone el
+  `<title>` en inglés) sin perder el estado de los componentes de cliente.
+
+#### e) Lo que NO se traduce
+
+Los **datos del catálogo** (títulos de eventos, recintos, ciudades, precios) llegan de la API
+tal cual y no cambian con el idioma. Lo que sí cambia con el idioma es el **formato** de fechas
+y horas (`Sáb 14 nov · 8:00 p. m.` → `Sat Nov 14 · 8:00 PM`), porque es parte de la interfaz.
+
+#### f) Que el inglés no rompa la interfaz
+
+Los textos en inglés pueden ser más largos. Lo que evita que algo se desborde:
+
+- Columnas con `minmax(0, 1fr)` y `min-width: 0` en los hijos de _flex_.
+- `overflow-wrap: anywhere` en títulos de tarjetas y categorías.
+- Botones con `flex-wrap` en sus filas (`.pie` de la tarjeta).
+- Se revisó con el navegador en 390, 768, 1024, 1280 y 1440 px, en ambos idiomas, que
+  `document.documentElement.scrollWidth` nunca supere el ancho de la ventana.

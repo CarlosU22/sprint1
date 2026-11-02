@@ -6,6 +6,7 @@ import { BotonEnlace } from "@/componentes/ui/Boton";
 import { useIdioma } from "@/contexto/ProveedorIdioma";
 import { ENLACES_PRINCIPALES, RUTAS } from "@/lib/navegacion";
 import { BuscadorEncabezado } from "./BuscadorEncabezado";
+import { CambioIdioma } from "./CambioIdioma";
 import { Logo } from "./Logo";
 import { MenuMovil } from "./MenuMovil";
 import { PanelAccesibilidad } from "./PanelAccesibilidad";
@@ -46,6 +47,7 @@ export function Encabezado() {
             <BuscadorEncabezado />
           </div>
           <PanelAccesibilidad />
+          <CambioIdioma />
           <BotonEnlace href={RUTAS.ingresar} variante="secundario" tamano="sm">
             {t("navbar.botones.ingresar")}
           </BotonEnlace>
