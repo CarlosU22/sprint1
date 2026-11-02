@@ -1,0 +1,136 @@
+.filtros {
+  display: flex;
+  flex-direction: column;
+}
+
+.cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: var(--espacio-4);
+}
+
+.titulo {
+  font-size: var(--texto-lg);
+  font-weight: var(--peso-medio);
+}
+
+/* Cada grupo va separado por una línea, como en Figma */
+.grupo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+  padding-block: var(--espacio-4);
+  border: none;
+  border-top: var(--grosor-borde) solid var(--color-borde);
+}
+
+.leyenda {
+  float: left; /* truco: hace que el <legend> se comporte como un bloque normal */
+  width: 100%;
+  margin-bottom: var(--espacio-1);
+  font-size: var(--texto-sm);
+  font-weight: var(--peso-medio);
+}
+
+label.leyenda,
+.campoCiudad label {
+  margin-bottom: 0;
+}
+
+.opciones {
+  clear: both;
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+}
+
+.opcion {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  font-size: var(--texto-sm);
+  cursor: pointer;
+}
+
+/* El radio se dibuja como el cuadrito del diseño */
+.opcion input {
+  appearance: none;
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: var(--espacio-4);
+  height: var(--espacio-4);
+  border: var(--grosor-borde) solid var(--color-borde-fuerte);
+  border-radius: var(--radio-sm);
+  background: var(--color-superficie);
+  cursor: pointer;
+}
+
+.opcion input:hover {
+  border-color: var(--color-texto);
+}
+
+.opcion input:checked {
+  border-color: var(--color-primario);
+  background: var(--color-primario);
+}
+
+/* Palomita blanca dentro del cuadro marcado */
+.opcion input:checked::after {
+  content: "";
+  width: var(--espacio-1);
+  height: var(--espacio-2);
+  margin-top: calc(var(--grosor-borde) * -2);
+  border: solid var(--color-sobre-primario);
+  border-width: 0 var(--grosor-foco) var(--grosor-foco) 0;
+  transform: rotate(45deg);
+}
+
+.cantidad {
+  margin-left: auto;
+  font-size: var(--texto-xs);
+  color: var(--color-texto-tenue);
+}
+
+.pildoras {
+  clear: both;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espacio-2);
+}
+
+.pildora {
+  height: var(--alto-control-sm);
+  padding-inline: var(--espacio-3);
+  border: var(--grosor-borde) solid var(--color-borde-fuerte);
+  border-radius: var(--radio-redondo);
+  background: var(--color-superficie);
+  font-size: var(--texto-sm);
+  transition:
+    background-color var(--transicion),
+    border-color var(--transicion);
+}
+
+.pildora:hover {
+  border-color: var(--color-texto);
+}
+
+.pildora[aria-pressed="true"] {
+  border-color: var(--color-primario);
+  background: var(--color-primario);
+  color: var(--color-sobre-primario);
+}
+
+.rango {
+  width: 100%;
+  accent-color: var(--color-primario);
+  cursor: pointer;
+}
+
+.extremos {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--texto-sm);
+  font-weight: var(--peso-medio);
+}

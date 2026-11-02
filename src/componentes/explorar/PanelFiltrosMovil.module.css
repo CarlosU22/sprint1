@@ -1,0 +1,84 @@
+/* El botón "Filtros" solo aparece en pantallas pequeñas */
+.abrir {
+  display: none;
+}
+
+.abrir svg {
+  width: var(--tamano-icono-sm);
+  height: var(--tamano-icono-sm);
+}
+
+@media (max-width: 860px) {
+  .abrir {
+    display: inline-flex;
+  }
+}
+
+.contador {
+  display: grid;
+  place-items: center;
+  min-width: var(--espacio-5);
+  height: var(--espacio-5);
+  border-radius: var(--radio-redondo);
+  background: var(--color-primario);
+  color: var(--color-sobre-primario);
+  font-size: var(--texto-xs);
+}
+
+/* Panel que sube desde abajo y ocupa casi toda la pantalla */
+.dialogo {
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  border: none;
+  background: transparent;
+}
+
+.dialogo::backdrop {
+  background: var(--color-capa);
+}
+
+.panel {
+  position: absolute;
+  inset: var(--espacio-10) 0 0;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radio-xl) var(--radio-xl) 0 0;
+  background: var(--color-superficie);
+}
+
+.cerrar {
+  position: absolute;
+  top: var(--espacio-3);
+  right: var(--espacio-3);
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: var(--alto-control);
+  height: var(--alto-control);
+  border-radius: var(--radio-md);
+}
+
+.cerrar:hover {
+  background: var(--color-superficie-suave);
+}
+
+.cerrar svg {
+  width: var(--tamano-icono);
+  height: var(--tamano-icono);
+}
+
+.contenido {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--espacio-5) var(--margen-lateral);
+  /* deja espacio para la X de cerrar a la derecha del título "Filtros" */
+  padding-right: calc(var(--margen-lateral) + var(--alto-control));
+}
+
+.pie {
+  padding: var(--espacio-4) var(--margen-lateral);
+  border-top: var(--grosor-borde) solid var(--color-borde);
+}
