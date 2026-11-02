@@ -13,8 +13,3 @@ npm run dev
 ```
 
 Abre <http://localhost:3000>.
-
-## Documentación
-
-Lee **[GUIA_DE_ESTUDIO.md](./GUIA_DE_ESTUDIO.md)**: explica la estructura del proyecto,
-qué hace cada archivo y cómo se conectan las partes, historia por historia.
