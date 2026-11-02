@@ -1,0 +1,43 @@
+.estado {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--espacio-2);
+  padding: var(--espacio-16) var(--espacio-4);
+  text-align: center;
+}
+
+.titulo {
+  font-size: var(--texto-lg);
+  font-weight: var(--peso-medio);
+}
+
+.texto {
+  max-width: var(--ancho-texto-hero);
+  margin-bottom: var(--espacio-2);
+  color: var(--color-texto-suave);
+}
+
+/* Círculo que gira mientras se carga */
+.indicador {
+  width: var(--espacio-8);
+  height: var(--espacio-8);
+  margin-bottom: var(--espacio-2);
+  border: var(--grosor-foco) solid var(--color-borde);
+  border-top-color: var(--color-texto);
+  border-radius: var(--radio-redondo);
+  animation: girar 0.8s linear infinite;
+}
+
+@keyframes girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Si el sistema pide menos movimiento, el círculo no gira */
+@media (prefers-reduced-motion: reduce) {
+  .indicador {
+    animation: none;
+  }
+}
