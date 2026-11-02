@@ -1,0 +1,53 @@
+/* El aviso flota abajo, centrado y con el ancho del contenido */
+.aviso {
+  position: fixed;
+  bottom: var(--espacio-4);
+  left: 50%;
+  z-index: 50;
+  transform: translateX(-50%);
+  width: calc(100% - var(--margen-lateral) * 2);
+  max-width: var(--ancho-contenido);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-6);
+  padding: var(--espacio-4) var(--espacio-6);
+  background: var(--color-superficie);
+  border: var(--grosor-borde) solid var(--color-borde);
+  border-radius: var(--radio-xl);
+  box-shadow: var(--sombra-panel);
+}
+
+.titulo {
+  font-size: var(--texto-md);
+  letter-spacing: var(--espaciado-letras-normal);
+}
+
+.texto {
+  font-size: var(--texto-sm);
+  color: var(--color-texto-suave);
+}
+
+.botones {
+  display: flex;
+  gap: var(--espacio-2);
+  flex-shrink: 0;
+}
+
+/* Mismo tamaño para los dos botones */
+.boton {
+  min-width: var(--ancho-boton-minimo);
+}
+
+@media (max-width: 640px) {
+  .aviso {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--espacio-4);
+    padding: var(--espacio-4);
+  }
+
+  .botones .boton {
+    flex: 1;
+  }
+}

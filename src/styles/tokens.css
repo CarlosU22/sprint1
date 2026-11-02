@@ -1,0 +1,113 @@
+/*
+ * TOKENS DEL SISTEMA DE DISEÑO
+ * ----------------------------
+ * Aquí están TODOS los valores que salen de Figma: colores, tipografía,
+ * espacios, radios y sombras. Los componentes NO escriben valores a mano,
+ * siempre usan var(--nombre-del-token).
+ *
+ * Si en Figma cambia un color, solo se cambia aquí y se actualiza todo el sitio.
+ */
+
+:root {
+  /* ===== Colores ===== */
+  --color-fondo: #f6f6f6; /* gris muy claro del fondo de la página */
+  --color-superficie: #ffffff; /* tarjetas, encabezado, paneles */
+  --color-superficie-suave: #f1f1f1; /* buscador del encabezado, íconos de categoría */
+  --color-texto: #111111;
+  --color-texto-suave: #5c5c5c;
+  --color-texto-tenue: #8a8a8a;
+  --color-borde: #e3e3e3;
+  --color-borde-fuerte: #c4c4c4;
+
+  --color-primario: #141414; /* botones negros */
+  --color-primario-hover: #333333;
+  --color-sobre-primario: #ffffff; /* texto encima del primario */
+
+  --color-oscuro: #161616; /* hero y pie de página */
+  --color-sobre-oscuro: #ffffff;
+  --color-sobre-oscuro-suave: #a8a8a8;
+  --color-borde-oscuro: #2c2c2c;
+
+  --color-etiqueta: #ededed; /* fondo de las etiquetas tipo "Concierto" */
+  --color-deshabilitado: #e9e9e9;
+  --color-texto-deshabilitado: #a3a3a3;
+  --color-foco: #4f46e5; /* anillo de foco para teclado */
+  --color-error: #b42318;
+  --color-capa: rgb(0 0 0 / 45%); /* fondo detrás de los paneles móviles */
+  --color-blanco-translucido: rgb(255 255 255 / 18%); /* círculos de los afiches */
+  --color-negro-translucido: rgb(0 0 0 / 14%);
+
+  /* ===== Tipografía ===== */
+  --fuente-base: var(--font-geist-sans), system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --texto-xs: 0.6875rem; /* 11px: etiquetas pequeñas */
+  --texto-sm: 0.8125rem; /* 13px: textos secundarios */
+  --texto-md: 0.9375rem; /* 15px: texto normal */
+  --texto-lg: 1.125rem; /* 18px: títulos de tarjeta */
+  --texto-xl: 1.5rem; /* 24px: títulos de sección */
+  --texto-2xl: 2rem; /* 32px: título de página */
+  --texto-3xl: 3.25rem; /* 52px: título del hero */
+
+  --peso-normal: 400;
+  --peso-medio: 500;
+  --peso-fuerte: 600;
+
+  --interlineado-apretado: 1.1;
+  --interlineado-titulo: 1.25;
+  --interlineado-normal: 1.5;
+  --espaciado-letras-titulo: -0.02em;
+  --espaciado-letras-normal: 0;
+
+  /* ===== Espacios (escala de 4 px) ===== */
+  --espacio-1: 0.25rem; /* 4px */
+  --espacio-2: 0.5rem; /* 8px */
+  --espacio-3: 0.75rem; /* 12px */
+  --espacio-4: 1rem; /* 16px */
+  --espacio-5: 1.25rem; /* 20px */
+  --espacio-6: 1.5rem; /* 24px */
+  --espacio-8: 2rem; /* 32px */
+  --espacio-10: 2.5rem; /* 40px */
+  --espacio-12: 3rem; /* 48px */
+  --espacio-16: 4rem; /* 64px */
+
+  /* ===== Radios ===== */
+  --radio-sm: 0.375rem; /* 6px: etiquetas */
+  --radio-md: 0.5rem; /* 8px: botones y campos */
+  --radio-lg: 0.75rem; /* 12px: tarjetas */
+  --radio-xl: 1rem; /* 16px: hero destacado, paneles */
+  --radio-redondo: 999px; /* píldoras */
+
+  /* ===== Bordes y sombras ===== */
+  --grosor-borde: 1px;
+  --grosor-foco: 2px;
+  --sombra-tarjeta: 0 1px 2px rgb(0 0 0 / 5%);
+  --sombra-panel: 0 12px 32px rgb(0 0 0 / 14%);
+
+  /* ===== Medidas de la maqueta ===== */
+  --ancho-contenido: 75rem; /* 1200px */
+  --margen-lateral: var(--espacio-6);
+  --alto-encabezado: 4rem; /* 64px */
+  --alto-control: 2.5rem; /* 40px: botones y campos */
+  --alto-control-sm: 2rem; /* 32px */
+  --tamano-icono: 1.125rem; /* 18px */
+  --tamano-icono-sm: 0.875rem; /* 14px */
+  --ancho-filtros: 15rem; /* 240px: barra de filtros de Explorar */
+  --ancho-panel: 20rem; /* 320px: paneles flotantes */
+  --alto-afiche: 7rem; /* alto de la imagen de la tarjeta */
+  --ancho-boton-minimo: 7rem; /* para que dos botones vecinos midan igual */
+
+  /* ===== Movimiento ===== */
+  --transicion: 150ms ease;
+
+  /* Escala del texto: la cambia el panel de accesibilidad */
+  --escala-texto: 1;
+}
+
+/* En pantallas pequeñas el margen lateral y el título del hero se achican */
+@media (max-width: 640px) {
+  :root {
+    --margen-lateral: var(--espacio-4);
+    --texto-3xl: 2.25rem;
+    --texto-2xl: 1.625rem;
+  }
+}

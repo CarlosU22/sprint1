@@ -1,0 +1,18 @@
+.tarjeta {
+  position: relative;
+  overflow: hidden;
+  background: var(--color-superficie);
+  border: var(--grosor-borde) solid var(--color-borde);
+  border-radius: var(--radio-lg);
+  box-shadow: var(--sombra-tarjeta);
+  transition: border-color var(--transicion);
+}
+
+.tarjeta:hover {
+  border-color: var(--color-borde-fuerte);
+}
+
+/* Si algo dentro de la tarjeta recibe foco con teclado, se marca toda la tarjeta */
+.tarjeta:focus-within {
+  border-color: var(--color-texto-suave);
+}
