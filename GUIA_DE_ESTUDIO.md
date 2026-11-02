@@ -331,3 +331,102 @@ sprint 1 lleven a una vista real.
 
 Cada página exporta `generateMetadata()`: Next.js la ejecuta en el servidor para poner el
 `<title>` de la pestaña con el texto de `paginas.<pagina>.seo.titulo`.
+
+---
+
+### US-TAQ-S1-03 · Inicio público
+
+**Rama:** `feat/us-taq-s1-03-inicio`
+
+#### a) La página · `src/app/page.tsx`
+
+`page.tsx` dentro de `src/app` es la ruta `/`. Es un **componente de servidor `async`**:
+
+```ts
+const [destacados, categorias, ciudades] = await Promise.all([
+  obtenerDestacados(), // GET /eventos/destacados
+  obtenerCategorias(), // GET /categorias
+  obtenerCiudades(), // GET /ciudades
+]);
+```
+
+`Promise.all` lanza las tres peticiones **al mismo tiempo** y espera a que terminen todas.
+Si se hicieran con tres `await` seguidos, cada una esperaría a la anterior.
+
+Después pide `GET /eventos?ciudad=<ciudad con más eventos>&orden=fecha&porPagina=4` para la
+sección "Próximamente en …". La ciudad **no está escrita a mano**: es la primera de
+`GET /ciudades`, que viene ordenada de más a menos eventos.
+
+Con los datos listos, la página pinta las secciones y les pasa los datos por _props_:
+
+```
+page.tsx (servidor)
+ ├─ <Hero destacado ciudades categorias />      componentes/inicio/Hero.tsx
+ ├─ <ListaCategorias categorias />              componentes/inicio/ListaCategorias.tsx
+ ├─ <SeccionEventos "destacados" eventos />     componentes/inicio/SeccionEventos.tsx
+ └─ <SeccionEventos "proximos" eventos />            └─ <TarjetaEvento /> por cada evento
+```
+
+#### b) Datos vs. textos (¡importante!)
+
+En cada tarjeta hay dos tipos de información:
+
+| Viene de…                                                       | Ejemplos                                                                     | ¿Se traduce?                   |
+| --------------------------------------------------------------- | ---------------------------------------------------------------------------- | ------------------------------ |
+| **Datos del catálogo** (`/eventos`, `/categorias`, `/ciudades`) | "Noche de Salsa Brava", "Teatro Aurora", 95000, número de eventos            | **No**. Llegan como están.     |
+| **Textos de la interfaz** (`/textos`)                           | "Desde", "Ver evento", "Concierto", "42 eventos", "Próximamente en {ciudad}" | **Sí**, cambian con el idioma. |
+
+El nombre visible de cada categoría sale de `general.categorias.<id>` (los textos de la
+interfaz); de `/categorias` se usan el `id` (para el enlace) y el número de eventos.
+
+#### c) Componentes nuevos
+
+| Archivo                                  | Qué hace                                                                                                                                                                                                                                                           |
+| ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `componentes/inicio/Hero.tsx`            | Título, subtítulo, buscador grande y tarjeta del evento destacado (el primero de `/eventos/destacados`). El buscador es un `<Form action="/explorar">` con campos `q`, `ciudad` y `fecha`: al enviarlo, el navegador arma la URL `/explorar?q=…&ciudad=…&fecha=…`. |
+| `componentes/inicio/ListaCategorias.tsx` | Las seis categorías. Cada una enlaza a `/explorar?categoria=<id>`. El ícono se elige con un objeto `ICONOS[id]`.                                                                                                                                                   |
+| `componentes/inicio/SeccionEventos.tsx`  | Título + subtítulo + "Ver todos" + grilla de tarjetas. Se usa dos veces con distintos textos.                                                                                                                                                                      |
+| `componentes/ui/TarjetaEvento.tsx`       | Tarjeta de un evento. Se reutiliza en Explorar. "Ver evento" lleva a `/eventos/<slug>` (vista 3, sprint 2).                                                                                                                                                        |
+| `componentes/ui/Afiche.tsx`              | La API no manda fotos, manda `afiche: { color1, color2, patron }`. Se pinta con un `linear-gradient` y el patrón con degradados repetidos (`repeating-linear-gradient`…). Los colores entran como variables CSS en `style`, porque llegan en tiempo de ejecución.  |
+| `componentes/ui/EstadoPagina.tsx`        | Bloque para los estados de carga, vacío y error.                                                                                                                                                                                                                   |
+| `src/lib/formatos.ts`                    | `formatearFecha`, `formatearHora` y `formatearPrecio` con `Intl` (ver abajo).                                                                                                                                                                                      |
+
+#### d) Fechas y precios con `Intl`
+
+La API manda `"fecha": "2026-11-15T01:00:00.000Z"` (UTC). En Colombia eso es el sábado 14 a
+las 8:00 p. m. Por eso `formatos.ts` usa siempre `timeZone: "America/Bogota"`.
+
+```ts
+formatearFecha("2026-11-15T01:00:00.000Z", "es")  // "Sáb 14 nov"
+formatearFecha("2026-11-15T01:00:00.000Z", "en")  // "Sat Nov 14"
+formatearHora(...)                                  // "8:00 p. m." / "8:00 PM"
+formatearPrecio(95000)                              // "$95.000"
+```
+
+Las piezas se unen con los textos de la API: `general.formatos.fechaYHora` es
+`"{fecha} · {hora}"`. Así, hasta el separador "·" viene de la API.
+
+#### e) `loading.tsx` y `error.tsx`
+
+Son **archivos especiales** de Next.js:
+
+- `src/app/loading.tsx`: se muestra **mientras** la página espera los datos (Next.js lo
+  envuelve en un `<Suspense>` por nosotros).
+- `src/app/error.tsx`: se muestra si la página lanza un error (por ejemplo, la API cae). Su
+  prop `retry()` vuelve a pedir los datos.
+
+Para probarlos se puede simular lentitud o error en la API con las cabeceras
+`X-Simular-Latencia: 2000` o `X-Simular-Error: 503` (ver la documentación de la API).
+
+#### f) Diseño adaptable (_responsive_)
+
+Todo se hace con CSS Grid y media queries:
+
+| Elemento   | Escritorio                    | Tablet (< 1024 px) | Móvil               |
+| ---------- | ----------------------------- | ------------------ | ------------------- |
+| Hero       | texto + destacado lado a lado | apilados           | buscador en columna |
+| Categorías | 6 columnas                    | 3 columnas         | 2 columnas          |
+| Tarjetas   | 4 columnas                    | 2 columnas         | 1 columna           |
+
+`minmax(0, 1fr)` en las columnas evita que un texto muy largo (por ejemplo en inglés) estire
+la grilla y cause desbordes horizontales.
