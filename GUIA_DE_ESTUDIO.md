@@ -430,3 +430,85 @@ Todo se hace con CSS Grid y media queries:
 
 `minmax(0, 1fr)` en las columnas evita que un texto muy largo (por ejemplo en inglés) estire
 la grilla y cause desbordes horizontales.
+
+---
+
+### US-TAQ-S1-04 · Explorar eventos
+
+**Rama:** `feat/us-taq-s1-04-explorar`
+
+#### a) La idea central: los filtros viven en la URL
+
+```
+/explorar?categoria=teatro&ciudad=Manizales&q=salsa&orden=precio&pagina=2
+```
+
+La URL es la **fuente de la verdad**. No hay un `useState` con los filtros: si se recarga la
+página o se comparte el enlace, los filtros siguen ahí porque están en la dirección.
+
+El ciclo completo cuando alguien marca "Teatro":
+
+```
+1. Clic en "Teatro"               (Filtros.tsx, cliente)
+2. navegar({ categoria: "teatro" })
+3. crearUrlExplorar(...)  →  "/explorar?categoria=teatro"      (lib/filtros.ts)
+4. router.push(url)               cambia la URL sin recargar
+5. Next.js vuelve a ejecutar      src/app/explorar/page.tsx  (servidor)
+6. leerFiltros(searchParams)  →  { categoria: "teatro", ... }
+7. crearParametrosApi(filtros)  →  GET /eventos?categoria=teatro&orden=fecha&pagina=1&porPagina=9
+8. La página manda los eventos nuevos a <VistaExplorar> y React actualiza la pantalla
+```
+
+#### b) `src/lib/filtros.ts`: funciones puras
+
+Una **función pura** recibe datos y devuelve datos, sin tocar React ni la pantalla. Por eso
+son fáciles de entender y de probar.
+
+| Función                              | Entrada → Salida                                                                                                                                                     |
+| ------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `leerFiltros(searchParams)`          | Parámetros de la URL → objeto `FiltrosExplorar`. Lo inválido se ignora (`orden=xyz` queda en `fecha`, `pagina=-3` queda en `1`).                                     |
+| `crearParametrosApi(filtros)`        | Objeto → parámetros de `GET /eventos`. Convierte `fecha=mes` en `desde`/`hasta`.                                                                                     |
+| `rangoDeFecha(opcion)`               | `"hoy"`, `"finDeSemana"`, `"mes"` → `{ desde, hasta }` en hora de Colombia.                                                                                          |
+| `crearUrlExplorar(filtros, cambios)` | Objeto + cambios → nueva URL. Si cambia un filtro, vuelve a la página 1. No escribe los valores por defecto (`orden=fecha`, `pagina=1`) para que la URL quede corta. |
+
+#### c) Archivos de la vista
+
+| Archivo                                      | Tipo     | Qué hace                                                                                                            |
+| -------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------- |
+| `src/app/explorar/page.tsx`                  | Servidor | Lee `searchParams`, pide `/eventos`, `/categorias` y `/ciudades` con `Promise.all` y se los pasa a `VistaExplorar`. |
+| `componentes/explorar/VistaExplorar.tsx`     | Cliente  | Arma la vista: migas, título, total, filtros, chips, orden, grilla, vacío y paginación. Define `navegar()`.         |
+| `componentes/explorar/Filtros.tsx`           | Cliente  | Categoría (radios), fecha (píldoras con `aria-pressed`), ciudad (`<select>`) y precio (`<input type="range">`).     |
+| `componentes/explorar/FiltrosActivos.tsx`    | Cliente  | Chips "Teatro ×". La × quita ese filtro.                                                                            |
+| `componentes/explorar/Paginacion.tsx`        | Cliente  | Números con "…" (`1 2 3 … 11`). Son **enlaces**, no botones: cada página tiene su URL.                              |
+| `componentes/explorar/PanelFiltrosMovil.tsx` | Cliente  | En móvil, botón "Filtros" que abre los mismos filtros en un `<dialog>` ("Filtros abiertos" en Figma).               |
+
+#### d) Detalles que vale la pena entender
+
+- **`useTransition`** (en `VistaExplorar`): mientras llega la respuesta del servidor,
+  `cargando` es `true` y la grilla se atenúa en vez de quedar en blanco.
+- **`router.push(url, { scroll: false })`**: cambia la URL sin saltar al inicio de la página
+  cada vez que se marca un filtro.
+- **El control de precio** guarda el valor en un estado local mientras se arrastra, y solo
+  cambia la URL al soltar (`onPointerUp`, `onKeyUp`). Si no, se llamaría a la API en cada
+  píxel.
+- **`key` para reiniciar un componente**: `<ControlPrecio key={filtros.precioMax}>`. Cuando
+  "Limpiar" cambia el precio, la `key` cambia y React crea el control de nuevo con el valor
+  correcto.
+- **El mismo componente dos veces**: `Filtros` se dibuja en la barra lateral (escritorio) y en
+  el panel móvil. Para que los `id` de los campos no se repitan se usa `useId()`.
+- **`aria-live="polite"`** en "51 eventos coinciden con tus filtros": el lector de pantalla
+  anuncia el nuevo total cada vez que se filtra.
+- **Detalle de evento**: cada tarjeta enlaza a `/eventos/<slug>`. Esa vista es del sprint 2;
+  por ahora muestra la página 404 del proyecto.
+
+#### e) Decisiones y límites conocidos
+
+- **Categoría única:** la API recibe una sola `categoria`, así que se usan _radios_ (dibujados
+  como cuadritos para parecerse a Figma) con una opción "Todos".
+- **Precio:** la API solo tiene `precioMax`, así que el control tiene un solo extremo (Figma
+  muestra dos). El tope de $300.000 es una constante en `filtros.ts`.
+- **"Elegir fechas":** no se implementó. La API no trae textos para las etiquetas de los dos
+  campos de fecha ("desde"/"hasta"), y escribirlos a mano rompería la regla de los textos.
+  Están Hoy, Este fin de semana y Este mes.
+- **Título "Explorar eventos":** `paginas.explorar` no tiene título propio en la API; se usa
+  `footer.columnas.explora.enlaces.explorar`, que tiene exactamente ese texto en ambos idiomas.
