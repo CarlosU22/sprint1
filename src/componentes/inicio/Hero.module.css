@@ -1,0 +1,199 @@
+.hero {
+  background: var(--color-oscuro);
+  color: var(--color-sobre-oscuro);
+}
+
+.contenido {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--espacio-10);
+  padding-block: var(--espacio-12);
+}
+
+.texto {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-5);
+  min-width: 0;
+}
+
+.titulo {
+  font-size: var(--texto-3xl);
+  font-weight: var(--peso-medio);
+  line-height: var(--interlineado-apretado);
+}
+
+.subtitulo {
+  max-width: var(--ancho-texto-hero);
+  color: var(--color-sobre-oscuro-suave);
+}
+
+/* ===== Buscador blanco con tres campos ===== */
+.buscador {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  padding: var(--espacio-2);
+  border-radius: var(--radio-lg);
+  background: var(--color-superficie);
+  color: var(--color-texto);
+}
+
+.campo {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
+  column-gap: var(--espacio-2);
+  flex: 1;
+  min-width: 0;
+  padding: var(--espacio-1) var(--espacio-3);
+  cursor: pointer;
+}
+
+/* Línea separadora entre campos */
+.campo + .campo {
+  border-left: var(--grosor-borde) solid var(--color-borde);
+}
+
+.campo svg {
+  grid-row: 1 / 3;
+  align-self: center;
+  width: var(--tamano-icono-sm);
+  height: var(--tamano-icono-sm);
+  color: var(--color-texto-suave);
+}
+
+.etiquetaCampo {
+  font-size: var(--texto-xs);
+  color: var(--color-texto-suave);
+}
+
+.campo input,
+.campo select {
+  width: 100%;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  font-size: var(--texto-sm);
+  outline: none;
+  cursor: pointer;
+}
+
+.campo input::placeholder {
+  color: var(--color-texto);
+}
+
+/* El foco del teclado se marca en toda la caja del campo */
+.campo:focus-within {
+  border-radius: var(--radio-md);
+  outline: var(--grosor-foco) solid var(--color-foco);
+}
+
+.botonBuscar {
+  height: calc(var(--alto-control) + var(--espacio-2));
+  padding-inline: var(--espacio-6);
+}
+
+.populares {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espacio-4);
+  font-size: var(--texto-sm);
+  color: var(--color-sobre-oscuro-suave);
+}
+
+.populares ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espacio-4);
+}
+
+.populares a {
+  color: var(--color-sobre-oscuro);
+  font-weight: var(--peso-medio);
+}
+
+.populares a:hover {
+  text-decoration: underline;
+}
+
+/* ===== Tarjeta del evento destacado ===== */
+.destacado {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-height: var(--alto-destacado);
+  padding: var(--espacio-6);
+  overflow: hidden;
+  border-radius: var(--radio-xl);
+}
+
+.fondoDestacado {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+}
+
+.tarjetaDestacado {
+  position: relative; /* queda encima del afiche */
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+  width: 100%;
+  padding: var(--espacio-5);
+  border-radius: var(--radio-lg);
+  background: var(--color-superficie);
+  color: var(--color-texto);
+}
+
+.tituloDestacado {
+  font-size: var(--texto-xl);
+  font-weight: var(--peso-medio);
+}
+
+.filaDestacado {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--espacio-3);
+}
+
+.datoDestacado {
+  font-size: var(--texto-sm);
+  color: var(--color-texto-suave);
+}
+
+.precioDestacado {
+  font-weight: var(--peso-fuerte);
+}
+
+/* ===== Tablet y móvil ===== */
+@media (max-width: 1023px) {
+  .contenido {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .contenido {
+    padding-block: var(--espacio-8);
+  }
+
+  .buscador {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .campo {
+    padding-block: var(--espacio-2);
+  }
+
+  .campo + .campo {
+    border-left: none;
+    border-top: var(--grosor-borde) solid var(--color-borde);
+  }
+}
