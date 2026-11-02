@@ -46,7 +46,7 @@
   --texto-lg: 1.125rem; /* 18px: títulos de tarjeta */
   --texto-xl: 1.5rem; /* 24px: títulos de sección */
   --texto-2xl: 2rem; /* 32px: título de página */
-  --texto-3xl: 3.25rem; /* 52px: título del hero */
+  --texto-3xl: 3rem; /* 48px: título del hero */
 
   --peso-normal: 400;
   --peso-medio: 500;
@@ -96,6 +96,8 @@
   --alto-afiche: 7rem; /* alto de la imagen de la tarjeta */
   --ancho-boton-minimo: 7rem; /* para que dos botones vecinos midan igual */
   --ancho-buscador: 13rem; /* buscador del encabezado */
+  --ancho-texto-hero: 34rem; /* ancho máximo del subtítulo del hero */
+  --alto-destacado: 18rem; /* alto mínimo de la tarjeta destacada del hero */
   --separacion-subrayado: 0.25em; /* distancia entre el texto y su subrayado */
 
   /* ===== Movimiento ===== */
