@@ -38,6 +38,11 @@ main {
   flex: 1;
 }
 
+/* main recibe el foco por código (ver ControlCookies): no hace falta marcarlo */
+main:focus {
+  outline: none;
+}
+
 img,
 svg {
   display: block;

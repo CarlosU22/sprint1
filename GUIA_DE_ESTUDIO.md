@@ -585,3 +585,220 @@ Los textos en inglés pueden ser más largos. Lo que evita que algo se desborde:
 - Botones con `flex-wrap` en sus filas (`.pie` de la tarjeta).
 - Se revisó con el navegador en 390, 768, 1024, 1280 y 1440 px, en ambos idiomas, que
   `document.documentElement.scrollWidth` nunca supere el ancho de la ventana.
+
+---
+
+### US-TAQ-S1-06 · Aceptar o rechazar las cookies
+
+**Rama:** `feat/us-taq-s1-06-cookies`
+
+#### a) Cómo funciona
+
+```
+Primera visita (no hay cookie "consentimiento")
+  layout.tsx (servidor) ── obtenerConsentimiento() → null
+        │
+        └─ <ControlCookies mostrarAviso={true} />  →  se ve el aviso
+
+Clic en "Aceptar"                         Clic en "Rechazar"
+  consentimiento=aceptado                   consentimiento=rechazado
+  idioma=<idioma actual>                    se borra la cookie idioma
+        └──────────── el aviso desaparece y no vuelve a salir ────────────┘
+```
+
+- La decisión se lee **en el servidor** (`src/lib/cookiesServidor.ts`). Por eso el aviso
+  viene en el primer HTML cuando hace falta, y no aparece y desaparece al cargar.
+- Rechazar también guarda una cookie (`consentimiento=rechazado`). Es una cookie _necesaria_:
+  sin ella, el sitio no sabría que ya preguntó y mostraría el aviso en cada visita.
+- Si se rechaza, el sitio **funciona igual**: se puede navegar, filtrar y cambiar de idioma.
+  Lo único que cambia es que el idioma no se recuerda al volver (historia 05).
+
+#### b) Archivos
+
+| Archivo                                     | Qué hace                                                            |
+| ------------------------------------------- | ------------------------------------------------------------------- |
+| `src/componentes/ui/AvisoCookies.tsx`       | Solo lo visual (historia 01): título, texto y dos botones.          |
+| `src/componentes/layout/ControlCookies.tsx` | La lógica: muestra u oculta el aviso y escribe o borra las cookies. |
+| `src/lib/cookiesServidor.ts`                | `obtenerConsentimiento()`: lee la cookie en el servidor.            |
+| `src/lib/cookies.ts`                        | Nombres de las cookies y funciones para el navegador (historia 05). |
+
+#### c) Mismo peso visual y teclado
+
+- "Rechazar" y "Aceptar" usan el mismo componente `Boton`, con la misma altura y el mismo
+  ancho mínimo (`--ancho-boton-minimo`). Así ninguno "empuja" a la persona a aceptar.
+- El aviso es una `<section aria-labelledby>`: los lectores de pantalla lo anuncian como una
+  región con el título "Usamos cookies".
+- Está al **inicio del HTML** (justo después de "Saltar al contenido"), aunque con CSS se vea
+  abajo. Así, con dos Tab ya se llega a "Rechazar".
+- Al decidir, el aviso desaparece y el foco pasa a `<main id="contenido" tabIndex={-1}>`, para
+  que quien usa teclado no quede "perdido" al inicio de la página.
+
+#### d) Cómo probarlo
+
+Las cookies se ven en las herramientas del navegador: **F12 → Aplicación → Cookies →
+http://localhost:3000**. Para volver a ver el aviso, borra la cookie `consentimiento` y
+recarga.
+
+---
+
+## 5. Mapa del proyecto
+
+```
+taquilla/
+├── .env.example              ← plantilla de NEXT_PUBLIC_API_URL
+├── GUIA_DE_ESTUDIO.md        ← esta guía
+├── next.config.ts            ← configuración de Next.js
+├── eslint.config.mjs         ← reglas de ESLint
+├── .prettierrc.json          ← formato del código
+└── src/
+    ├── app/                          ← RUTAS (cada carpeta = una URL)
+    │   ├── layout.tsx                  envuelve todas las páginas
+    │   ├── globals.css                 estilos globales
+    │   ├── page.tsx                    /            (Inicio)
+    │   ├── loading.tsx                 estado de carga
+    │   ├── error.tsx                   estado de error
+    │   ├── not-found.tsx               página 404
+    │   ├── explorar/page.tsx           /explorar
+    │   ├── ingresar/page.tsx           /ingresar
+    │   └── registro/page.tsx           /registro
+    │
+    ├── componentes/
+    │   ├── ui/                       ← COMPONENTES BASE reutilizables
+    │   │   ├── Boton, Campo, Etiqueta, Tarjeta
+    │   │   ├── SelectorIdioma, AvisoCookies   (solo visuales)
+    │   │   ├── TarjetaEvento, Afiche
+    │   │   └── EstadoPagina
+    │   ├── layout/                   ← PIEZAS DEL LAYOUT
+    │   │   ├── Encabezado, MenuMovil, PieDePagina, Logo
+    │   │   ├── BuscadorEncabezado, SaltarAlContenido
+    │   │   ├── CambioIdioma, ControlCookies   (conectan lo visual con la lógica)
+    │   │   ├── PanelAccesibilidad, OpcionesAccesibilidad
+    │   │   └── VistaPendiente, NoEncontrado
+    │   ├── inicio/                   ← SECCIONES DE LA VISTA 1
+    │   │   └── Hero, ListaCategorias, SeccionEventos
+    │   └── explorar/                 ← PIEZAS DE LA VISTA 2
+    │       └── VistaExplorar, Filtros, FiltrosActivos, Paginacion, PanelFiltrosMovil
+    │
+    ├── contexto/                     ← ESTADO COMPARTIDO (React Context)
+    │   ├── ProveedorIdioma.tsx         idioma + textos + cambiarIdioma
+    │   └── ProveedorAccesibilidad.tsx  opciones del panel de accesibilidad
+    │
+    ├── lib/                          ← LÓGICA SIN INTERFAZ
+    │   ├── api.ts                      llamadas a la API
+    │   ├── tipos.ts                    tipos del contrato OpenAPI
+    │   ├── textos.ts                   t() y tPlural()
+    │   ├── textosServidor.ts           textos e idioma en el servidor
+    │   ├── cookies.ts                  cookies en el navegador
+    │   ├── cookiesServidor.ts          cookies en el servidor
+    │   ├── filtros.ts                  URL ⇄ filtros ⇄ parámetros de la API
+    │   ├── formatos.ts                 fechas y precios
+    │   └── navegacion.ts               rutas del sitio
+    │
+    └── styles/
+        └── tokens.css                ← TOKENS DE DISEÑO (colores, tipografía, espacios…)
+```
+
+**Regla para ubicar un archivo nuevo:**
+
+- ¿Es una URL? → `src/app/`
+- ¿Se ve en pantalla y se reutiliza en varias vistas? → `componentes/ui/`
+- ¿Es parte de una sola vista? → `componentes/<vista>/`
+- ¿Es lógica sin interfaz (cálculos, llamadas, formatos)? → `lib/`
+- ¿Es un dato que muchos componentes necesitan a la vez? → `contexto/`
+
+---
+
+## 6. Cómo se hila todo (visión completa)
+
+```
+                       ┌──────────────────────────────┐
+                       │  API Taquilla (fly.dev)      │
+                       │  /textos /categorias /ciudades│
+                       │  /eventos /eventos/destacados │
+                       └──────────────┬───────────────┘
+                                      │ fetch (lib/api.ts)
+              ┌───────────────────────┴────────────────────────┐
+              │ SERVIDOR (Next.js)                             │
+              │                                                │
+              │ layout.tsx                                     │
+              │  ├ cookie idioma ──► GET /textos?idioma=…       │
+              │  ├ cookie consentimiento ──► ¿mostrar aviso?    │
+              │  └ <ProveedorIdioma textos>                     │
+              │                                                │
+              │ page.tsx (/)          explorar/page.tsx         │
+              │  └ destacados,          └ searchParams ──►       │
+              │    categorías,            leerFiltros ──►        │
+              │    ciudades               GET /eventos?...       │
+              └───────────────────────┬────────────────────────┘
+                                      │ HTML + datos como props
+              ┌───────────────────────┴────────────────────────┐
+              │ NAVEGADOR (componentes "use client")           │
+              │                                                │
+              │ useIdioma() → t("…")   en todos los componentes  │
+              │                                                │
+              │ Selector ES|EN ──► GET /textos (desde el navegador)│
+              │                    └► setTextos → todo se repinta │
+              │                                                │
+              │ Filtros ──► router.push(nueva URL) ──► el servidor│
+              │             vuelve a ejecutar explorar/page.tsx │
+              │                                                │
+              │ Aviso de cookies ──► document.cookie             │
+              └────────────────────────────────────────────────┘
+```
+
+Tres ideas que lo resumen:
+
+1. **Los datos se piden en el servidor** y bajan como _props_.
+2. **Los textos viven en un contexto** para poder cambiar de idioma sin recargar.
+3. **Los filtros viven en la URL**, que es la fuente de la verdad de Explorar.
+
+---
+
+## 7. Glosario
+
+| Término                    | Significado                                                                                                                            |
+| -------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| **App Router**             | Sistema de rutas de Next.js basado en carpetas dentro de `src/app`.                                                                    |
+| **Componente de servidor** | Se ejecuta en el servidor; puede ser `async` y llamar a la API. No tiene estado ni eventos.                                            |
+| **Componente de cliente**  | Empieza con `"use client"`; se ejecuta en el navegador y puede usar `useState`, `onClick`…                                             |
+| **Props**                  | Datos que un componente padre le pasa a un hijo.                                                                                       |
+| **Estado (`useState`)**    | Dato que, al cambiar, hace que React vuelva a pintar el componente.                                                                    |
+| **Contexto**               | Forma de compartir datos con muchos componentes sin pasar _props_ nivel por nivel.                                                     |
+| **Hook**                   | Función de React que empieza con `use` (`useState`, `useEffect`, `useIdioma`…).                                                        |
+| **Token de diseño**        | Valor de diseño con nombre (`--color-primario`) guardado como variable CSS.                                                            |
+| **CSS Modules**            | Archivos `.module.css` cuyas clases solo aplican al componente que los importa.                                                        |
+| **searchParams**           | Los parámetros de la URL después del `?`.                                                                                              |
+| **Hidratación**            | Cuando React "toma el control" en el navegador del HTML que generó el servidor. El HTML del servidor y el del cliente deben coincidir. |
+| **CORS**                   | Permiso que da una API para que la llamen desde páginas de otros dominios.                                                             |
+| **Cookie**                 | Dato pequeño que el navegador guarda y envía al servidor en cada petición.                                                             |
+| **aria-\***                | Atributos que dan información extra a los lectores de pantalla (`aria-label`, `aria-expanded`, `aria-current`…).                       |
+| **Conventional Commits**   | Formato de mensajes de commit: `tipo: descripción`.                                                                                    |
+
+---
+
+## 8. Preguntas para repasar
+
+1. ¿Por qué `src/app/page.tsx` puede usar `await` y `Hero.tsx` no?
+2. Si quisieras cambiar el negro de todos los botones, ¿qué archivo tocarías? ¿Por qué solo ese?
+3. Explica paso a paso qué pasa desde que marcas "Teatro" en Explorar hasta que ves los
+   eventos nuevos.
+4. ¿Por qué los filtros están en la URL y no en un `useState`?
+5. ¿Qué diferencia hay entre `t("…")` y `tPlural("…", n)`? Da un ejemplo de cada uno.
+6. Si una persona rechaza las cookies y cambia a inglés, ¿qué ve al recargar? ¿Por qué?
+7. ¿Por qué el menú móvil usa `<dialog>` y no un `<div>`? Nombra tres cosas que da gratis.
+8. ¿Qué hace `Promise.all` y por qué es mejor que tres `await` seguidos?
+9. ¿Por qué el nombre de un evento no cambia al pasar a inglés, pero "Ver evento" sí?
+10. ¿Qué pasaría si `NEXT_PUBLIC_API_URL` no tuviera el prefijo `NEXT_PUBLIC_`?
+
+---
+
+## 9. Pendientes conocidos del sprint 1
+
+- **Despliegue en Vercel:** no se hizo porque el proyecto se mantiene solo en local. Los pasos
+  están en la historia 01, sección f.
+- **Diseño móvil de Figma:** se construyó a partir de las capturas de escritorio y de los
+  paneles móviles; conviene compararlo contra los marcos móviles de Figma.
+- **"Elegir fechas"** en Explorar: falta porque la API no trae textos para sus etiquetas.
+- **Precio con dos extremos:** la API solo acepta `precioMax`.
+- **Enlaces a páginas futuras:** "Términos de uso", "Accesibilidad" y el detalle de cada evento
+  (`/eventos/<slug>`) muestran la página 404 hasta que se construyan en otros sprints.

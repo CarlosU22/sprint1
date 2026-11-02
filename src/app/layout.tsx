@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
+import { ControlCookies } from "@/componentes/layout/ControlCookies";
 import { Encabezado } from "@/componentes/layout/Encabezado";
 import { PieDePagina } from "@/componentes/layout/PieDePagina";
 import { SaltarAlContenido } from "@/componentes/layout/SaltarAlContenido";
 import { ProveedorAccesibilidad } from "@/contexto/ProveedorAccesibilidad";
 import { ProveedorIdioma } from "@/contexto/ProveedorIdioma";
+import { obtenerConsentimiento } from "@/lib/cookiesServidor";
 import { obtenerTraductorServidor } from "@/lib/textosServidor";
 import "./globals.css";
 
@@ -31,6 +33,8 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   // 1. Pedimos los textos de la interfaz a la API (en el servidor)
   const { idioma, textos } = await obtenerTraductorServidor();
+  // ¿Ya decidió sobre las cookies? Si no, se muestra el aviso
+  const consentimiento = await obtenerConsentimiento();
 
   return (
     <html lang={idioma} className={geist.variable}>
@@ -40,9 +44,15 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
           <ProveedorAccesibilidad>
             {/* Primer elemento con Tab: permite saltarse la navegación */}
             <SaltarAlContenido />
+            {/* El aviso va al inicio del HTML para llegar a él rápido con Tab;
+                con CSS se ve abajo, flotando */}
+            <ControlCookies mostrarAviso={consentimiento === null} />
             <Encabezado />
             {/* Cada page.tsx se pinta aquí, dentro de <main> */}
-            <main id="contenido">{children}</main>
+            {/* tabIndex={-1}: permite mover el foco aquí desde el código */}
+            <main id="contenido" tabIndex={-1}>
+              {children}
+            </main>
             <PieDePagina />
           </ProveedorAccesibilidad>
         </ProveedorIdioma>
