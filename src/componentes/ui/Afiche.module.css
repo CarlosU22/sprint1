@@ -1,0 +1,76 @@
+.afiche {
+  position: relative;
+  overflow: hidden;
+  height: var(--alto-afiche);
+  background: linear-gradient(135deg, var(--afiche-color1), var(--afiche-color2));
+}
+
+/* Patrones: se dibujan con degradados que se repiten */
+.afiche::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.35;
+}
+
+.ondas::before {
+  background: repeating-radial-gradient(
+    circle at 0 100%,
+    transparent 0 var(--espacio-3),
+    var(--color-blanco-translucido) var(--espacio-3) var(--espacio-4)
+  );
+}
+
+.puntos::before {
+  background: radial-gradient(var(--color-blanco-translucido) 20%, transparent 22%) 0 0 /
+    var(--espacio-4) var(--espacio-4);
+}
+
+.lineas::before {
+  background: repeating-linear-gradient(
+    45deg,
+    transparent 0 var(--espacio-3),
+    var(--color-blanco-translucido) var(--espacio-3) var(--espacio-4)
+  );
+}
+
+.rombos::before {
+  background:
+    linear-gradient(45deg, var(--color-blanco-translucido) 25%, transparent 25%) 0 0 /
+      var(--espacio-6) var(--espacio-6),
+    linear-gradient(-45deg, var(--color-blanco-translucido) 25%, transparent 25%) 0 0 /
+      var(--espacio-6) var(--espacio-6);
+}
+
+.circulos::before {
+  background: repeating-radial-gradient(
+    circle at 50% 50%,
+    transparent 0 var(--espacio-4),
+    var(--color-blanco-translucido) var(--espacio-4) var(--espacio-5)
+  );
+}
+
+/* "liso" no tiene patrón: solo el degradado */
+
+/* Los dos círculos del diseño de Figma */
+.circuloGrande,
+.circuloPequeno {
+  position: absolute;
+  border-radius: var(--radio-redondo);
+}
+
+.circuloGrande {
+  top: -40%;
+  right: -10%;
+  width: 60%;
+  aspect-ratio: 1;
+  background: var(--color-blanco-translucido);
+}
+
+.circuloPequeno {
+  bottom: -35%;
+  left: -8%;
+  width: 35%;
+  aspect-ratio: 1;
+  background: var(--color-negro-translucido);
+}
