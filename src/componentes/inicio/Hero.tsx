@@ -73,7 +73,7 @@ export function Hero({ destacado, ciudades, categorias }: PropsHero) {
                 <option value="">
                   {t("paginas.inicio.hero.buscador.placeholders.cuando")}
                 </option>
-                {OPCIONES_FECHA.filter((opcion) => opcion !== "elegir").map((opcion) => (
+                {OPCIONES_FECHA.map((opcion) => (
                   <option key={opcion} value={opcion}>
                     {t(`paginas.explorar.filtros.fecha.${opcion}`)}
                   </option>
