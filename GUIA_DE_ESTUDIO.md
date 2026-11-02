@@ -209,3 +209,125 @@ vercel            # primera vez: crea el proyecto en tu cuenta
 vercel env add NEXT_PUBLIC_API_URL   # pega la dirección de la API
 vercel --prod     # despliega
 ```
+
+---
+
+### US-TAQ-S1-02 · Navegar por el sitio en web y móvil
+
+**Rama:** `feat/us-taq-s1-02-navegacion`
+
+#### a) El layout raíz · `src/app/layout.tsx`
+
+En Next.js, `layout.tsx` **envuelve todas las páginas**. Lo que se pone aquí aparece en
+todas las vistas sin repetirlo:
+
+```
+<html lang="es">
+  <body>
+    <ProveedorIdioma>            ← comparte los textos de la API
+      <ProveedorAccesibilidad>   ← comparte las opciones de accesibilidad
+        <SaltarAlContenido />    ← enlace oculto para teclado
+        <Encabezado />           ← <header> con <nav>
+        <main id="contenido">
+          {children}             ← aquí se pinta cada page.tsx
+        </main>
+        <PieDePagina />          ← <footer>
+```
+
+El layout es un **componente de servidor** y `async`: antes de pintar nada, pide los textos
+a la API con `obtenerTraductorServidor()` (archivo `src/lib/textosServidor.ts`).
+
+#### b) ¿Cómo llegan los textos a los componentes? (contexto de React)
+
+Regla del proyecto: **ningún texto está escrito dentro de un componente**. Todos salen de
+`GET /textos`. El camino es:
+
+```
+API  ──GET /textos──▶  layout.tsx (servidor)
+                          │  props: idioma, textos
+                          ▼
+                  <ProveedorIdioma>  (src/contexto/ProveedorIdioma.tsx)
+                          │  contexto de React
+                          ▼
+     cualquier componente:  const { t } = useIdioma();
+                            t("navbar.botones.ingresar")  →  "Ingresar"
+```
+
+- **Contexto de React** (`createContext` + `useContext`): sirve para compartir datos con
+  todos los componentes sin pasarlos por _props_ nivel por nivel.
+- `src/lib/textos.ts` tiene la función `crearTraductor(textos)`, que devuelve:
+  - `t(ruta, variables)`: busca un texto con una **ruta con puntos**
+    (`"footer.legal.derechos"`) y reemplaza las llaves (`{anio}` → `2026`).
+  - `tPlural(ruta, cantidad)`: escoge entre `uno` y `otro` según la cantidad
+    (`"1 evento"` / `"42 eventos"`).
+  - Si una ruta no existe, devuelve la misma ruta. Así se ve en pantalla qué texto falta.
+
+¿Por qué los componentes que muestran texto son de **cliente** (`"use client"`)? Porque en la
+historia 05 el idioma cambia **sin recargar la página**: el contexto recibe textos nuevos y
+todos los componentes que usan `useIdioma()` se vuelven a pintar solos.
+
+#### c) Encabezado y menú móvil · `src/componentes/layout/`
+
+| Archivo                  | Qué hace                                                                                                                                                                                |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Encabezado.tsx`         | `<header>` con logo, `<nav>` (Inicio, Explorar), buscador, botón de accesibilidad, Ingresar y Crear cuenta. Usa `usePathname()` para marcar el enlace actual con `aria-current="page"`. |
+| `Logo.tsx`               | Ícono + "taquilla". Siempre lleva a `/`. Tiene dos temas: oscuro (encabezado) y claro (pie).                                                                                            |
+| `BuscadorEncabezado.tsx` | Formulario `GET` a `/explorar` con un campo `name="q"`. Escribir "salsa" + Enter lleva a `/explorar?q=salsa`. Usa `<Form>` de `next/form`, que navega sin recargar.                     |
+| `MenuMovil.tsx`          | Botón hamburguesa + `<dialog>` con los enlaces, el buscador, los botones y las opciones de accesibilidad.                                                                               |
+| `PieDePagina.tsx`        | `<footer>` con logo, lema, tres columnas de enlaces y la línea legal.                                                                                                                   |
+| `SaltarAlContenido.tsx`  | Enlace invisible que aparece con la primera tecla Tab y lleva a `<main>`.                                                                                                               |
+| `src/lib/navegacion.ts`  | Todas las rutas del sitio (`RUTAS.explorar`…) en un solo lugar.                                                                                                                         |
+
+**¿Cómo cambia entre escritorio y móvil?** Con CSS, no con JavaScript. En
+`Encabezado.module.css`, por debajo de 1024 px se esconden la navegación y las acciones; en
+`MenuMovil.module.css`, en esa misma medida aparece el botón hamburguesa. No hay barra de
+pestañas inferior (lo pide el criterio 2).
+
+**¿Por qué `<dialog>` para el menú móvil?** El elemento nativo `<dialog>` abierto con
+`showModal()` ya resuelve el uso con teclado:
+
+- `Escape` lo cierra,
+- el foco queda **atrapado** dentro mientras está abierto (Tab no se escapa a la página de atrás),
+- al cerrarse, el navegador devuelve el foco al botón que lo abrió,
+- `::backdrop` es el fondo oscuro de atrás.
+
+El botón hamburguesa indica su estado con `aria-expanded` y apunta al menú con `aria-controls`.
+
+#### d) HTML semántico
+
+| Etiqueta                | Dónde                                                                                     |
+| ----------------------- | ----------------------------------------------------------------------------------------- |
+| `<header>`              | `Encabezado.tsx`                                                                          |
+| `<nav>`                 | Navegación principal y cada columna del pie (con `aria-labelledby` apuntando a su título) |
+| `<main id="contenido">` | `layout.tsx`, una sola vez                                                                |
+| `<footer>`              | `PieDePagina.tsx`                                                                         |
+
+**Encabezados en orden:** cada página tiene **un solo `<h1>`** (su título). Las secciones usan
+`<h2>` y lo que va dentro de una sección usa `<h3>`. Nunca se salta un nivel.
+
+#### e) Panel de accesibilidad (extra del diseño)
+
+En la barra de Figma hay un botón de accesibilidad que abre un panel. Se agregó porque sale en
+el diseño del sprint:
+
+- `src/contexto/ProveedorAccesibilidad.tsx`: guarda las opciones en `localStorage`. Si no hay
+  nada guardado, los valores iniciales salen del sistema operativo (`prefers-contrast`,
+  `prefers-reduced-motion`). Las aplica como atributos en `<html>` (`data-alto-contraste`…).
+- `src/styles/tokens.css` (al final): cada atributo **cambia tokens**. Por ejemplo, alto
+  contraste oscurece `--color-texto-suave` y `--color-borde`. Como todos los componentes usan
+  tokens, se adaptan solos. Esto muestra por qué los tokens valen la pena.
+- `PanelAccesibilidad.tsx` (escritorio) y `MenuMovil.tsx` (móvil) muestran el mismo contenido:
+  `OpcionesAccesibilidad.tsx`. Los interruptores son `<button role="switch" aria-checked>`.
+
+#### f) Páginas de Ingresar, Crear cuenta y 404
+
+- `src/app/ingresar/page.tsx` → ruta `/ingresar`
+- `src/app/registro/page.tsx` → ruta `/registro`
+- `src/app/not-found.tsx` → se muestra cuando una ruta no existe
+
+Los formularios de Ingresar y Crear cuenta son de otro sprint. Por ahora las páginas muestran
+el título y el subtítulo que manda la API (`VistaPendiente.tsx`), para que los enlaces del
+sprint 1 lleven a una vista real.
+
+Cada página exporta `generateMetadata()`: Next.js la ejecuta en el servidor para poner el
+`<title>` de la pestaña con el texto de `paginas.<pagina>.seo.titulo`.
