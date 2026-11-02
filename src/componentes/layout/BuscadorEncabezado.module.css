@@ -1,0 +1,15 @@
+.buscador {
+  width: 100%;
+}
+
+/* En el diseño el buscador es una píldora gris sin borde */
+.campo input {
+  height: var(--alto-control-sm);
+  border-color: var(--color-superficie-suave);
+  border-radius: var(--radio-redondo);
+  background: var(--color-superficie-suave);
+}
+
+.campo input:hover {
+  border-color: var(--color-borde-fuerte);
+}

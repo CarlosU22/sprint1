@@ -1,0 +1,109 @@
+.hamburguesa {
+  display: none;
+  place-items: center;
+  width: var(--alto-control);
+  height: var(--alto-control);
+  border: var(--grosor-borde) solid var(--color-borde-fuerte);
+  border-radius: var(--radio-md);
+}
+
+.hamburguesa:hover {
+  border-color: var(--color-texto);
+}
+
+.hamburguesa svg,
+.cerrar svg {
+  width: var(--tamano-icono);
+  height: var(--tamano-icono);
+}
+
+/* El botón solo aparece por debajo de 1024 px (igual que en Encabezado.module.css) */
+@media (max-width: 1023px) {
+  .hamburguesa {
+    display: grid;
+  }
+}
+
+/* <dialog> ocupa toda la pantalla; el panel blanco va a la derecha */
+.dialogo {
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  border: none;
+  background: transparent;
+}
+
+.dialogo::backdrop {
+  background: var(--color-capa);
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-6);
+  width: 100%;
+  max-width: var(--ancho-panel);
+  height: 100%;
+  margin-left: auto;
+  padding: var(--espacio-4) var(--margen-lateral) var(--espacio-8);
+  overflow-y: auto;
+  background: var(--color-superficie);
+}
+
+.cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cerrar {
+  display: grid;
+  place-items: center;
+  width: var(--alto-control);
+  height: var(--alto-control);
+  border-radius: var(--radio-md);
+}
+
+.cerrar:hover {
+  background: var(--color-superficie-suave);
+}
+
+.enlaces {
+  display: flex;
+  flex-direction: column;
+}
+
+.enlace {
+  display: block;
+  padding-block: var(--espacio-3);
+  border-bottom: var(--grosor-borde) solid var(--color-borde);
+  font-size: var(--texto-lg);
+  font-weight: var(--peso-medio);
+}
+
+.enlace[aria-current="page"] {
+  text-decoration: underline;
+  text-underline-offset: var(--separacion-subrayado);
+}
+
+.botones {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+}
+
+.seccion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+}
+
+.tituloSeccion {
+  font-size: var(--texto-xs);
+  font-weight: var(--peso-medio);
+  letter-spacing: var(--espaciado-letras-normal);
+  text-transform: uppercase;
+  color: var(--color-texto-suave);
+}

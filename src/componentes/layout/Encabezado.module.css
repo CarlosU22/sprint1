@@ -1,0 +1,57 @@
+.encabezado {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: var(--color-superficie);
+  border-bottom: var(--grosor-borde) solid var(--color-borde);
+}
+
+.barra {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-8);
+  height: var(--alto-encabezado);
+}
+
+.enlaces {
+  display: flex;
+  gap: var(--espacio-6);
+}
+
+.enlace {
+  font-size: var(--texto-sm);
+  color: var(--color-texto-suave);
+  transition: color var(--transicion);
+}
+
+.enlace:hover,
+.enlace[aria-current="page"] {
+  color: var(--color-texto);
+}
+
+.enlace[aria-current="page"] {
+  font-weight: var(--peso-medio);
+}
+
+.acciones {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-3);
+  margin-left: auto;
+}
+
+.buscador {
+  width: var(--ancho-buscador);
+}
+
+/* Por debajo de 1024 px no cabe todo: se esconde y se usa el menú móvil */
+@media (max-width: 1023px) {
+  .navegacion,
+  .acciones {
+    display: none;
+  }
+
+  .barra {
+    justify-content: space-between;
+  }
+}
