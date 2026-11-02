@@ -95,6 +95,8 @@
   --ancho-panel: 20rem; /* 320px: paneles flotantes */
   --alto-afiche: 7rem; /* alto de la imagen de la tarjeta */
   --ancho-boton-minimo: 7rem; /* para que dos botones vecinos midan igual */
+  --ancho-buscador: 13rem; /* buscador del encabezado */
+  --separacion-subrayado: 0.25em; /* distancia entre el texto y su subrayado */
 
   /* ===== Movimiento ===== */
   --transicion: 150ms ease;
@@ -110,4 +112,39 @@
     --texto-3xl: 2.25rem;
     --texto-2xl: 1.625rem;
   }
+}
+
+/*
+ * VARIANTES DEL PANEL DE ACCESIBILIDAD
+ * El contexto ProveedorAccesibilidad pone estos atributos en <html>.
+ * Como solo cambian tokens, todos los componentes se adaptan solos.
+ */
+html[data-alto-contraste] {
+  --color-texto-suave: #262626;
+  --color-texto-tenue: #3d3d3d;
+  --color-borde: #8c8c8c;
+  --color-borde-fuerte: #111111;
+  --color-sobre-oscuro-suave: #e8e8e8;
+  --color-borde-oscuro: #8c8c8c;
+}
+
+html[data-subrayar-enlaces] a {
+  text-decoration: underline;
+  text-underline-offset: var(--separacion-subrayado);
+}
+
+html[data-espaciado-lectura] body {
+  --interlineado-normal: 1.8;
+  --interlineado-titulo: 1.45;
+  letter-spacing: 0.03em;
+  word-spacing: 0.08em;
+}
+
+/* Quita animaciones si la persona lo pide en el panel */
+html[data-reducir-movimiento] *,
+html[data-reducir-movimiento] *::before,
+html[data-reducir-movimiento] *::after {
+  transition: none !important;
+  animation: none !important;
+  scroll-behavior: auto !important;
 }

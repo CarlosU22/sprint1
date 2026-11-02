@@ -1,0 +1,121 @@
+.opciones {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+}
+
+.grupo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+}
+
+.nombre {
+  font-size: var(--texto-sm);
+  font-weight: var(--peso-medio);
+}
+
+.descripcion {
+  font-size: var(--texto-xs);
+  color: var(--color-texto-suave);
+}
+
+/* Control − A + */
+.tamano {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--espacio-1);
+  border: var(--grosor-borde) solid var(--color-borde);
+  border-radius: var(--radio-md);
+}
+
+.botonTamano {
+  display: grid;
+  place-items: center;
+  width: var(--alto-control-sm);
+  height: var(--alto-control-sm);
+  border-radius: var(--radio-sm);
+  background: var(--color-superficie-suave);
+}
+
+.botonTamano:hover {
+  background: var(--color-borde);
+}
+
+.botonTamano:disabled {
+  color: var(--color-texto-deshabilitado);
+  cursor: not-allowed;
+}
+
+.botonTamano svg {
+  width: var(--tamano-icono-sm);
+  height: var(--tamano-icono-sm);
+}
+
+.muestra {
+  font-weight: var(--peso-medio);
+}
+
+.lista {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+}
+
+.opcion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-3);
+}
+
+/* Interruptor: una píldora con una perilla que se mueve */
+.interruptor {
+  flex-shrink: 0;
+  position: relative;
+  width: var(--espacio-10);
+  height: var(--espacio-6);
+  border-radius: var(--radio-redondo);
+  background: var(--color-borde-fuerte);
+  transition: background-color var(--transicion);
+}
+
+.perilla {
+  position: absolute;
+  top: var(--espacio-1);
+  left: var(--espacio-1);
+  width: var(--espacio-4);
+  height: var(--espacio-4);
+  border-radius: var(--radio-redondo);
+  background: var(--color-superficie);
+  transition: transform var(--transicion);
+}
+
+.interruptor[aria-checked="true"] {
+  background: var(--color-primario);
+}
+
+.interruptor[aria-checked="true"] .perilla {
+  transform: translateX(var(--espacio-4));
+}
+
+.nota {
+  font-size: var(--texto-xs);
+  color: var(--color-texto-suave);
+}
+
+.pie {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-3);
+  padding-top: var(--espacio-3);
+  border-top: var(--grosor-borde) solid var(--color-borde);
+}
+
+.enlace {
+  font-size: var(--texto-sm);
+  font-weight: var(--peso-medio);
+  text-decoration: underline;
+}

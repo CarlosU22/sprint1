@@ -1,0 +1,39 @@
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  flex-shrink: 0;
+}
+
+.icono {
+  display: grid;
+  place-items: center;
+  width: var(--espacio-8);
+  height: var(--espacio-8);
+  border-radius: var(--radio-md);
+}
+
+.icono svg {
+  width: var(--tamano-icono);
+  height: var(--tamano-icono);
+}
+
+.texto {
+  font-size: var(--texto-lg);
+  font-weight: var(--peso-fuerte);
+  letter-spacing: var(--espaciado-letras-titulo);
+}
+
+.oscuro .icono {
+  background: var(--color-primario);
+  color: var(--color-sobre-primario);
+}
+
+.claro .icono {
+  background: var(--color-superficie);
+  color: var(--color-primario);
+}
+
+.claro .texto {
+  color: var(--color-sobre-oscuro);
+}
