@@ -1,0 +1,66 @@
+.boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espacio-2);
+  height: var(--alto-control);
+  padding-inline: var(--espacio-4);
+  border: var(--grosor-borde) solid transparent;
+  border-radius: var(--radio-md);
+  font-size: var(--texto-sm);
+  font-weight: var(--peso-medio);
+  white-space: nowrap;
+  transition:
+    background-color var(--transicion),
+    border-color var(--transicion);
+}
+
+.sm {
+  height: var(--alto-control-sm);
+  padding-inline: var(--espacio-3);
+}
+
+.anchoCompleto {
+  width: 100%;
+}
+
+/* Negro relleno: "Crear cuenta", "Buscar", "Aceptar" */
+.primario {
+  background: var(--color-primario);
+  color: var(--color-sobre-primario);
+}
+
+.primario:hover {
+  background: var(--color-primario-hover);
+}
+
+/* Blanco con borde: "Ingresar", "Ver evento", "Rechazar" */
+.secundario {
+  background: var(--color-superficie);
+  border-color: var(--color-borde-fuerte);
+  color: var(--color-texto);
+}
+
+.secundario:hover {
+  border-color: var(--color-texto);
+}
+
+/* Sin fondo ni borde: "Limpiar", "Ver todos" */
+.fantasma {
+  background: transparent;
+  color: var(--color-texto);
+  padding-inline: var(--espacio-2);
+}
+
+.fantasma:hover {
+  background: var(--color-superficie-suave);
+}
+
+/* Estado deshabilitado: igual para todas las variantes */
+.boton:disabled,
+.boton[aria-disabled="true"] {
+  background: var(--color-deshabilitado);
+  border-color: var(--color-deshabilitado);
+  color: var(--color-texto-deshabilitado);
+  cursor: not-allowed;
+}

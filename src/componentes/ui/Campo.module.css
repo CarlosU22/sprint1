@@ -1,0 +1,68 @@
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+}
+
+.etiqueta {
+  font-size: var(--texto-sm);
+  font-weight: var(--peso-medio);
+  color: var(--color-texto);
+}
+
+.caja {
+  position: relative;
+}
+
+.icono {
+  position: absolute;
+  top: 50%;
+  left: var(--espacio-3);
+  transform: translateY(-50%);
+  color: var(--color-texto-suave);
+  pointer-events: none;
+}
+
+.icono svg {
+  width: var(--tamano-icono-sm);
+  height: var(--tamano-icono-sm);
+}
+
+.control {
+  width: 100%;
+  height: var(--alto-control);
+  padding-inline: var(--espacio-3);
+  border: var(--grosor-borde) solid var(--color-borde-fuerte);
+  border-radius: var(--radio-md);
+  background: var(--color-superficie);
+  font-size: var(--texto-sm);
+  transition: border-color var(--transicion);
+}
+
+/* Si hay ícono, el texto empieza más a la derecha */
+.icono + .control {
+  padding-left: var(--espacio-8);
+}
+
+.control::placeholder {
+  color: var(--color-texto-tenue);
+}
+
+.control:hover {
+  border-color: var(--color-texto-suave);
+}
+
+.control:focus-visible {
+  border-color: var(--color-foco);
+  outline-offset: 0;
+}
+
+.control:disabled {
+  background: var(--color-deshabilitado);
+  color: var(--color-texto-deshabilitado);
+  cursor: not-allowed;
+}
+
+.select {
+  cursor: pointer;
+}

@@ -1,0 +1,20 @@
+.etiqueta {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding: var(--espacio-1) var(--espacio-2);
+  border-radius: var(--radio-sm);
+  font-size: var(--texto-xs);
+  font-weight: var(--peso-medio);
+  line-height: var(--interlineado-apretado);
+}
+
+.gris {
+  background: var(--color-etiqueta);
+  color: var(--color-texto);
+}
+
+.blanca {
+  background: var(--color-superficie);
+  color: var(--color-texto);
+}
