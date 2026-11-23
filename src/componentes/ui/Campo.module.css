@@ -66,3 +66,25 @@
 .select {
   cursor: pointer;
 }
+
+/* Campo con error: borde rojo y mensaje debajo */
+.control[aria-invalid="true"] {
+  border-color: var(--color-error);
+}
+
+.error {
+  font-size: var(--texto-xs);
+  color: var(--color-error);
+}
+
+/* Botón dentro del campo, a la derecha (el ojo de la contraseña) */
+.conAccion {
+  padding-right: var(--espacio-10);
+}
+
+.accion {
+  position: absolute;
+  top: 50%;
+  right: var(--espacio-1);
+  transform: translateY(-50%);
+}

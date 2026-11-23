@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import { ControlCookies } from "@/componentes/layout/ControlCookies";
-import { Encabezado } from "@/componentes/layout/Encabezado";
-import { PieDePagina } from "@/componentes/layout/PieDePagina";
 import { SaltarAlContenido } from "@/componentes/layout/SaltarAlContenido";
 import { ProveedorAccesibilidad } from "@/contexto/ProveedorAccesibilidad";
 import { ProveedorIdioma } from "@/contexto/ProveedorIdioma";
@@ -27,8 +25,13 @@ export async function generateMetadata(): Promise<Metadata> {
 
 /**
  * LAYOUT RAÍZ
- * Envuelve TODAS las páginas. Aquí van las piezas que se repiten en todas
- * las vistas: encabezado, pie de página y los "proveedores" de contexto.
+ * Envuelve TODAS las páginas. Aquí van las piezas que comparten todas las
+ * vistas: los "proveedores" de contexto, "Saltar al contenido" y el aviso de cookies.
+ *
+ * El encabezado y el pie NO van aquí: los pone el layout de cada grupo de rutas.
+ *   - app/(sitio)/layout.tsx  → con encabezado y pie (Inicio, Explorar…)
+ *   - app/(cuenta)/layout.tsx → pantalla completa, sin ellos (Ingresar)
+ * Los paréntesis hacen que el nombre del grupo no aparezca en la URL.
  */
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   // 1. Pedimos los textos de la interfaz a la API (en el servidor)
@@ -47,13 +50,8 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
             {/* El aviso va al inicio del HTML para llegar a él rápido con Tab;
                 con CSS se ve abajo, flotando */}
             <ControlCookies mostrarAviso={consentimiento === null} />
-            <Encabezado />
-            {/* Cada page.tsx se pinta aquí, dentro de <main> */}
-            {/* tabIndex={-1}: permite mover el foco aquí desde el código */}
-            <main id="contenido" tabIndex={-1}>
-              {children}
-            </main>
-            <PieDePagina />
+            {/* Aquí se pinta el layout del grupo (sitio o cuenta) con su página */}
+            {children}
           </ProveedorAccesibilidad>
         </ProveedorIdioma>
       </body>

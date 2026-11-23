@@ -33,6 +33,7 @@
   --color-texto-deshabilitado: #a3a3a3;
   --color-foco: #4f46e5; /* anillo de foco para teclado */
   --color-error: #b42318;
+  --color-error-fondo: #fdecec; /* fondo del aviso "Revisa los campos marcados" */
   --color-capa: rgb(0 0 0 / 45%); /* fondo detrás de los paneles móviles */
   --color-blanco-translucido: rgb(255 255 255 / 18%); /* círculos de los afiches */
   --color-negro-translucido: rgb(0 0 0 / 14%);
@@ -99,6 +100,8 @@
   --ancho-texto-hero: 34rem; /* ancho máximo del subtítulo del hero */
   --alto-destacado: 18rem; /* alto mínimo de la tarjeta destacada del hero */
   --separacion-subrayado: 0.25em; /* distancia entre el texto y su subrayado */
+  --ancho-formulario: 24rem; /* formulario de Ingresar */
+  --ancho-presentacion: 40%; /* panel negro de Ingresar */
 
   /* ===== Movimiento ===== */
   --transicion: 150ms ease;

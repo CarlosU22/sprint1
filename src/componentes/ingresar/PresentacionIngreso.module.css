@@ -1,0 +1,59 @@
+.presentacion {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--espacio-12);
+  padding: var(--espacio-12);
+  background: var(--color-oscuro);
+  color: var(--color-sobre-oscuro);
+}
+
+.contenido {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-6);
+}
+
+/* El lema se ve como título, pero no es el <h1>: el <h1> es "Ingresa a tu cuenta" */
+.lema {
+  font-size: var(--texto-3xl);
+  font-weight: var(--peso-fuerte);
+  line-height: var(--interlineado-apretado);
+  letter-spacing: var(--espaciado-letras-titulo);
+}
+
+.beneficios {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+  font-size: var(--texto-sm);
+}
+
+.beneficios li {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-3);
+}
+
+/* Círculo gris con el chulito */
+.marca {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: var(--espacio-5);
+  height: var(--espacio-5);
+  border-radius: var(--radio-redondo);
+  background: var(--color-texto-suave);
+}
+
+.marca svg {
+  width: var(--tamano-icono-sm);
+  height: var(--tamano-icono-sm);
+}
+
+/* En pantallas angostas no cabe al lado del formulario: se oculta */
+@media (max-width: 900px) {
+  .presentacion {
+    display: none;
+  }
+}

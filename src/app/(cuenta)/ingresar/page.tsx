@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { VistaPendiente } from "@/componentes/layout/VistaPendiente";
+import { VistaIngresar } from "@/componentes/ingresar/VistaIngresar";
 import { obtenerTraductorServidor } from "@/lib/textosServidor";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -10,7 +10,7 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-// Ruta /ingresar. El formulario se construye en un sprint siguiente.
+// Ruta /ingresar (vista 4). El envío lo hace la Server Action de ./acciones.ts
 export default function PaginaIngresar() {
-  return <VistaPendiente pagina="ingresar" />;
+  return <VistaIngresar />;
 }

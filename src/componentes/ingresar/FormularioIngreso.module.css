@@ -1,0 +1,98 @@
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-6);
+  width: 100%;
+  max-width: var(--ancho-formulario);
+}
+
+.encabezado {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+}
+
+.titulo {
+  font-size: var(--texto-2xl);
+}
+
+.subtitulo {
+  font-size: var(--texto-sm);
+  color: var(--color-texto-suave);
+}
+
+.campos {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+}
+
+/* Botón del ojo dentro del campo de contraseña */
+.ojo {
+  display: grid;
+  place-items: center;
+  width: var(--alto-control-sm);
+  height: var(--alto-control-sm);
+  border-radius: var(--radio-md);
+  color: var(--color-texto-suave);
+}
+
+.ojo:hover {
+  color: var(--color-texto);
+}
+
+.ojo svg {
+  width: var(--tamano-icono);
+  height: var(--tamano-icono);
+}
+
+/* "Mantener la sesión iniciada" y "¿Olvidaste tu contraseña?" en la misma fila */
+.opciones {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--espacio-2);
+  font-size: var(--texto-xs);
+}
+
+.casilla {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  cursor: pointer;
+}
+
+.casilla input {
+  width: var(--tamano-icono-sm);
+  height: var(--tamano-icono-sm);
+  accent-color: var(--color-primario); /* la casilla marcada es negra, como en Figma */
+  cursor: pointer;
+}
+
+.enlace {
+  font-weight: var(--peso-medio);
+  text-decoration: underline;
+  text-underline-offset: var(--separacion-subrayado);
+}
+
+.registro {
+  font-size: var(--texto-xs);
+  text-align: center;
+  color: var(--color-texto-suave);
+}
+
+.registro .enlace {
+  color: var(--color-texto);
+}
+
+/* El logo solo aparece aquí cuando el panel negro está oculto (móvil) */
+.logoMovil {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .logoMovil {
+    display: block;
+  }
+}

@@ -12,5 +12,10 @@ export async function generateMetadata(): Promise<Metadata> {
 
 // Ruta /registro (Crear cuenta). El formulario se construye en un sprint siguiente.
 export default function PaginaRegistro() {
-  return <VistaPendiente pagina="registro" />;
+  return (
+    <VistaPendiente
+      titulo="paginas.registro.formulario.titulo"
+      texto="paginas.registro.formulario.subtitulo"
+    />
+  );
 }

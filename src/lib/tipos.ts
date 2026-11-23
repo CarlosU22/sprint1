@@ -1,7 +1,7 @@
 /*
  * TIPOS DE DATOS DE LA API
  * Son una copia en TypeScript de los "schemas" del contrato OpenAPI de Taquilla.
- * Solo están los que usamos en el sprint 1.
+ * Solo están los que usamos en el proyecto.
  */
 
 export type Idioma = "es" | "en";
@@ -82,6 +82,23 @@ export interface Paginacion {
   porPagina: number;
   total: number;
   paginas: number;
+}
+
+// ---------- Sesión (vista 4) ----------
+
+/** La persona que inició sesión */
+export interface Usuario {
+  id: string;
+  nombre: string;
+  correo: string;
+  correoVerificado: boolean;
+  rol: string;
+}
+
+/** Respuesta de POST /sesion */
+export interface RespuestaSesion {
+  usuario: Usuario;
+  token: string;
 }
 
 /** Forma de los errores de la API: { error: { codigo, mensaje, campos?, detalles? } } */
