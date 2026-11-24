@@ -1,10 +1,10 @@
 "use client";
 
-import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useActionState, useEffect, useRef, useState } from "react";
 import { ingresar } from "@/app/(cuenta)/ingresar/acciones";
+import { CampoClave } from "@/componentes/cuenta/CampoClave";
 import { Logo } from "@/componentes/layout/Logo";
 import { Aviso } from "@/componentes/ui/Aviso";
 import { Boton } from "@/componentes/ui/Boton";
@@ -17,7 +17,7 @@ import {
   type Mensaje,
 } from "@/lib/ingreso";
 import { RUTAS } from "@/lib/navegacion";
-import estilos from "./FormularioIngreso.module.css";
+import estilos from "@/componentes/cuenta/FormularioCuenta.module.css";
 
 const ESTADO_INICIAL: EstadoIngreso = { tipo: "inicial" };
 
@@ -54,7 +54,6 @@ export function FormularioIngreso() {
   const [correo, setCorreo] = useState("");
   const [clave, setClave] = useState("");
   const [mantener, setMantener] = useState(true);
-  const [verClave, setVerClave] = useState(false);
 
   const refAviso = useRef<HTMLDivElement>(null);
   const refCorreo = useRef<HTMLInputElement>(null);
@@ -150,30 +149,15 @@ export function FormularioIngreso() {
           error={textoDe(errores.correo)}
         />
 
-        <Campo
+        <CampoClave
           ref={refClave}
           id="clave"
           name="clave"
-          type={verClave ? "text" : "password"}
           autoComplete="current-password"
           etiqueta={t("paginas.ingresar.formulario.etiquetas.clave")}
           value={clave}
           onChange={(evento) => setClave(evento.target.value)}
           error={textoDe(errores.clave)}
-          accion={
-            <button
-              type="button"
-              className={estilos.ojo}
-              onClick={() => setVerClave(!verClave)}
-              aria-label={t(
-                verClave
-                  ? "paginas.ingresar.formulario.botones.ocultarClave"
-                  : "paginas.ingresar.formulario.botones.mostrarClave",
-              )}
-            >
-              {verClave ? <EyeOff aria-hidden="true" /> : <Eye aria-hidden="true" />}
-            </button>
-          }
         />
 
         <div className={estilos.opciones}>
@@ -197,7 +181,7 @@ export function FormularioIngreso() {
         </Boton>
       </form>
 
-      <p className={estilos.registro}>
+      <p className={estilos.pie}>
         {t("paginas.ingresar.formulario.mensajes.sinCuenta")}{" "}
         <Link href={RUTAS.registro} className={estilos.enlace}>
           {t("paginas.ingresar.formulario.enlaces.crearCuenta")}

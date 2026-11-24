@@ -46,7 +46,7 @@
   height: var(--tamano-icono);
 }
 
-/* "Mantener la sesión iniciada" y "¿Olvidaste tu contraseña?" en la misma fila */
+/* Fila de opciones: "Mantener la sesión iniciada" y "¿Olvidaste tu contraseña?" */
 .opciones {
   display: flex;
   align-items: center;
@@ -76,13 +76,13 @@
   text-underline-offset: var(--separacion-subrayado);
 }
 
-.registro {
+.pie {
   font-size: var(--texto-xs);
   text-align: center;
   color: var(--color-texto-suave);
 }
 
-.registro .enlace {
+.pie .enlace {
   color: var(--color-texto);
 }
 

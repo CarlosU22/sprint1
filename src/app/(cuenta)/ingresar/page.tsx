@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { VistaIngresar } from "@/componentes/ingresar/VistaIngresar";
+import { PantallaCuenta } from "@/componentes/cuenta/PantallaCuenta";
+import { FormularioIngreso } from "@/componentes/ingresar/FormularioIngreso";
 import { obtenerTraductorServidor } from "@/lib/textosServidor";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -10,7 +11,14 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
+/** Claves de paginas.ingresar.presentacion.beneficios, en el orden de Figma */
+const BENEFICIOS = ["descubre", "filtra", "consulta"] as const;
+
 // Ruta /ingresar (vista 4). El envío lo hace la Server Action de ./acciones.ts
 export default function PaginaIngresar() {
-  return <VistaIngresar />;
+  return (
+    <PantallaCuenta pagina="ingresar" beneficios={BENEFICIOS}>
+      <FormularioIngreso />
+    </PantallaCuenta>
+  );
 }
