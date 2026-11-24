@@ -30,3 +30,17 @@
   font-size: var(--texto-xs);
   color: var(--color-texto-suave);
 }
+
+.acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espacio-3);
+  margin-top: var(--espacio-2);
+  font-size: var(--texto-xs);
+  font-weight: var(--peso-medio);
+}
+
+.acciones a {
+  text-decoration: underline;
+  text-underline-offset: var(--separacion-subrayado);
+}

@@ -13,6 +13,8 @@ interface PropsCampo extends InputHTMLAttributes<HTMLInputElement> {
   error?: string;
   /** Algo clicable dentro del campo, a la derecha (por ejemplo, el ojo de la contraseña) */
   accion?: ReactNode;
+  /** Ayuda debajo del campo ("Sin puntos ni espacios"). El lector de pantalla la lee al entrar */
+  ayuda?: ReactNode;
 }
 
 /** Campo de texto con su etiqueta (<label> + <input>) */
@@ -23,10 +25,14 @@ export function Campo({
   icono,
   error,
   accion,
+  ayuda,
   className,
   ...resto
 }: PropsCampo) {
   const idError = `${id}-error`;
+  const idAyuda = `${id}-ayuda`;
+  // El campo se "describe" con su ayuda y su error (los dos, si hay)
+  const descripcion = [ayuda && idAyuda, error && idError].filter(Boolean).join(" ");
 
   return (
     <div className={`${estilos.campo} ${className ?? ""}`}>
@@ -47,11 +53,16 @@ export function Campo({
           className={`${estilos.control} ${accion ? estilos.conAccion : ""}`}
           // Los lectores de pantalla anuncian "inválido" y leen el mensaje de error
           aria-invalid={error ? true : undefined}
-          aria-describedby={error ? idError : undefined}
+          aria-describedby={descripcion || undefined}
           {...resto}
         />
         {accion && <span className={estilos.accion}>{accion}</span>}
       </div>
+      {ayuda && (
+        <div id={idAyuda} className={estilos.ayuda}>
+          {ayuda}
+        </div>
+      )}
       {error && (
         <p id={idError} className={estilos.error}>
           {error}

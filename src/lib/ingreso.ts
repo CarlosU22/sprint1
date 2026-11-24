@@ -42,7 +42,7 @@ export function leerCampo(datos: FormData, nombre: string) {
  * Lo mínimo para que algo parezca un correo: texto@texto.texto, sin espacios.
  * La revisión completa la hace la API (responde 422 si no es válido).
  */
-function pareceCorreo(texto: string) {
+export function pareceCorreo(texto: string) {
   const [usuario, dominio, ...sobra] = texto.split("@");
   if (sobra.length > 0 || !usuario || !dominio || /\s/.test(texto)) return false;
   const punto = dominio.lastIndexOf(".");

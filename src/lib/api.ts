@@ -11,6 +11,7 @@ import type {
   EventoResumen,
   Idioma,
   Paginacion,
+  RespuestaRegistro,
   RespuestaSesion,
   RespuestaTextos,
 } from "./tipos";
@@ -132,7 +133,7 @@ export function buscarEventos(parametros: URLSearchParams) {
   );
 }
 
-// ---------- Sesión (vista 4) ----------
+// ---------- Sesión (vistas 4 y 5) ----------
 
 /**
  * POST /sesion  →  { usuario, token }
@@ -141,4 +142,13 @@ export function buscarEventos(parametros: URLSearchParams) {
  */
 export function crearSesion(correo: string, clave: string) {
   return enviar<RespuestaSesion>("/sesion", { correo, clave });
+}
+
+/**
+ * POST /usuarios  →  { usuario, token, verificacion }
+ * Crea la cuenta y deja la sesión abierta. Como crearSesion(), solo desde el servidor.
+ * `datos` lleva lo que pide el contrato (nombre, correo, clave): ver acciones.ts de /registro.
+ */
+export function crearCuenta(datos: { nombre?: string; correo: string; clave: string }) {
+  return enviar<RespuestaRegistro>("/usuarios", datos);
 }
