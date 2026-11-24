@@ -1,5 +1,5 @@
 /**
- * Layout de las vistas de cuenta (Ingresar): en Figma ocupan toda la pantalla,
+ * Layout de las vistas de cuenta (Ingresar y Crear cuenta): ocupan toda la pantalla,
  * sin encabezado ni pie. Solo ponemos el <main> al que apunta "Saltar al contenido".
  */
 export default function LayoutCuenta({ children }: LayoutProps<"/">) {

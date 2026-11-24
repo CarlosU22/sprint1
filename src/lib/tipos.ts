@@ -84,7 +84,7 @@ export interface Paginacion {
   paginas: number;
 }
 
-// ---------- Sesión (vista 4) ----------
+// ---------- Sesión (vistas 4 y 5) ----------
 
 /** La persona que inició sesión */
 export interface Usuario {
@@ -99,6 +99,11 @@ export interface Usuario {
 export interface RespuestaSesion {
   usuario: Usuario;
   token: string;
+}
+
+/** Respuesta de POST /usuarios: la sesión abierta + el código para verificar el correo */
+export interface RespuestaRegistro extends RespuestaSesion {
+  verificacion: { enviadaA: string; codigoDePrueba?: string };
 }
 
 /** Forma de los errores de la API: { error: { codigo, mensaje, campos?, detalles? } } */

@@ -1,10 +1,12 @@
 import { CircleAlert } from "lucide-react";
-import type { Ref } from "react";
+import type { ReactNode, Ref } from "react";
 import estilos from "./Aviso.module.css";
 
 interface PropsAviso {
   titulo: string;
-  texto: string;
+  texto?: string;
+  /** Botones o enlaces debajo del texto ("Ingresar", "Restablecer contraseña") */
+  children?: ReactNode;
   /** Para mover el foco al aviso cuando aparece */
   ref?: Ref<HTMLDivElement>;
 }
@@ -14,13 +16,14 @@ interface PropsAviso {
  * ("Revisa los campos marcados", "No pudimos conectarnos"…).
  * role="alert": el lector de pantalla lo lee apenas aparece.
  */
-export function Aviso({ titulo, texto, ref }: PropsAviso) {
+export function Aviso({ titulo, texto, children, ref }: PropsAviso) {
   return (
     <div ref={ref} role="alert" tabIndex={-1} className={estilos.aviso}>
       <CircleAlert aria-hidden="true" className={estilos.icono} />
       <div>
         <p className={estilos.titulo}>{titulo}</p>
-        <p className={estilos.texto}>{texto}</p>
+        {texto && <p className={estilos.texto}>{texto}</p>}
+        {children && <div className={estilos.acciones}>{children}</div>}
       </div>
     </div>
   );

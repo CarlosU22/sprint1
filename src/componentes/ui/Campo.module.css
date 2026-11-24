@@ -88,3 +88,9 @@
   right: var(--espacio-1);
   transform: translateY(-50%);
 }
+
+/* Ayuda debajo del campo, en gris */
+.ayuda {
+  font-size: var(--texto-xs);
+  color: var(--color-texto-suave);
+}

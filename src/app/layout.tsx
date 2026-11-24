@@ -30,7 +30,7 @@ export async function generateMetadata(): Promise<Metadata> {
  *
  * El encabezado y el pie NO van aquí: los pone el layout de cada grupo de rutas.
  *   - app/(sitio)/layout.tsx  → con encabezado y pie (Inicio, Explorar…)
- *   - app/(cuenta)/layout.tsx → pantalla completa, sin ellos (Ingresar)
+ *   - app/(cuenta)/layout.tsx → pantalla completa, sin ellos (Ingresar, Crear cuenta)
  * Los paréntesis hacen que el nombre del grupo no aparezca en la URL.
  */
 export default async function RootLayout({ children }: LayoutProps<"/">) {

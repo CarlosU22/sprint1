@@ -1,0 +1,23 @@
+/* Requisitos de la contraseña: se marcan mientras se escribe */
+.requisitos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espacio-1) var(--espacio-3);
+  margin-top: var(--espacio-1);
+}
+
+.requisitos li {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-1);
+}
+
+.requisitos svg {
+  width: var(--tamano-icono-sm);
+  height: var(--tamano-icono-sm);
+}
+
+/* Requisito cumplido: texto fuerte, en vez del gris de la ayuda */
+.cumplido {
+  color: var(--color-texto);
+}
