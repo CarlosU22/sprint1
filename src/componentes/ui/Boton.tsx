@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { LoaderCircle } from "lucide-react";
 import type { ButtonHTMLAttributes, ComponentProps } from "react";
 import estilos from "./Boton.module.css";
 
@@ -29,21 +30,38 @@ function clasesBoton(
     .join(" ");
 }
 
+interface PropsBoton extends PropsComunes, ButtonHTMLAttributes<HTMLButtonElement> {
+  /** true mientras se envía algo: muestra el círculo que gira y no deja volver a hacer clic */
+  cargando?: boolean;
+}
+
 /** Botón normal (<button>) para acciones: enviar, abrir, cerrar... */
 export function Boton({
   variante = "primario",
   tamano = "md",
   anchoCompleto = false,
+  cargando = false,
   className,
   type = "button",
+  disabled,
+  children,
   ...resto
-}: PropsComunes & ButtonHTMLAttributes<HTMLButtonElement>) {
+}: PropsBoton) {
   return (
     <button
       type={type}
-      className={clasesBoton(variante, tamano, anchoCompleto, className)}
+      className={clasesBoton(
+        variante,
+        tamano,
+        anchoCompleto,
+        `${cargando ? estilos.cargando : ""} ${className ?? ""}`,
+      )}
+      disabled={disabled || cargando}
       {...resto}
-    />
+    >
+      {cargando && <LoaderCircle aria-hidden="true" className={estilos.indicador} />}
+      {children}
+    </button>
   );
 }
 

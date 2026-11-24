@@ -1,0 +1,24 @@
+/* Ocupa toda la pantalla: dos columnas en escritorio, una sola en móvil */
+.vista {
+  display: grid;
+  grid-template-columns: var(--ancho-presentacion) 1fr;
+  min-height: 100vh;
+}
+
+.lado {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--espacio-12) var(--margen-lateral);
+  background: var(--color-superficie);
+}
+
+@media (max-width: 900px) {
+  .vista {
+    grid-template-columns: 1fr;
+  }
+
+  .lado {
+    align-items: flex-start;
+  }
+}

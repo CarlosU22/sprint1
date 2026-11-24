@@ -64,3 +64,29 @@
   color: var(--color-texto-deshabilitado);
   cursor: not-allowed;
 }
+
+/* Cargando ("Ingresando…"): en Figma es gris oscuro, no el gris de deshabilitado */
+.boton.cargando:disabled {
+  background: var(--color-primario-hover);
+  border-color: var(--color-primario-hover);
+  color: var(--color-sobre-primario);
+  cursor: progress;
+}
+
+.indicador {
+  width: var(--tamano-icono-sm);
+  height: var(--tamano-icono-sm);
+  animation: girar 0.8s linear infinite;
+}
+
+@keyframes girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .indicador {
+    animation: none;
+  }
+}

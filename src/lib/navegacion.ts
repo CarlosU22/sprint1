@@ -8,6 +8,7 @@ export const RUTAS = {
   explorar: "/explorar",
   ingresar: "/ingresar",
   registro: "/registro",
+  recuperarClave: "/recuperar-clave",
   terminos: "/terminos",
   accesibilidad: "/accesibilidad",
 } as const;
